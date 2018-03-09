@@ -16,7 +16,7 @@
 					<ul class="nav navbar-top-links navbar-left">
 						<li>
 							<a href="javascript:void(0)" class="open-close waves-effect waves-light">
-								<i class="glyphicon glyphicon-menu-hamburger"></i>
+								<i class="ti-menu"></i>
 							</a>
 						</li>
 					</ul>
@@ -26,12 +26,12 @@
 						<li class="dropdown">
 							<a class="dropdown-toggle profile-pic" style="cursor: pointer;">
 								<b class="hidden-xs">您好：</b>
-								<b class="hidden-xs">李俊杰</b>
+								<b class="hidden-xs">{{UserName}}</b>
 							</a>
 						</li>
 						<li class="dropdown">
 							<a class="dropdown-toggle profile-pic" style="cursor: pointer;">
-								<b class="hidden-xs">退出</b>
+								<b class="hidden-xs"v-on:click="SignOut">退出</b>
 							</a>
 						</li>
 					</ul>
@@ -42,7 +42,7 @@
 			<div class="navbar-default sidebar" role="navigation">
 				<div class="sidebar-nav slimscrollsidebar">
 					<div class="sidebar-head">
-						<h3><span class="fa-fw open-close"><i class="glyphicon glyphicon-menu-hamburger"></i></span><span class="hide-menu">导航</span></h3>
+						<h3><span class="fa-fw open-close"><i class="ti-close ti-menu"></i></span><span class="hide-menu">导航</span></h3>
 					</div>
 					<div class="user-profile">
 						<div class="dropdown user-pro-body">
@@ -76,3 +76,21 @@
 
 	</div>
 </template>
+<script type="text/javascript">
+export default {
+  name: 'app',
+  data () {
+    return {
+      UserName: '山东信融'
+    }
+  },
+  mounted(){
+	
+  },
+  methods:{
+  	SignOut(){
+  		alert("确定退出吗")
+  	}
+  }
+}
+</script>
