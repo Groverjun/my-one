@@ -17,6 +17,11 @@ $(document).ready(function () {
     $(".open-close").on("click", function () {
         body.toggleClass("show-sidebar").toggleClass("hide-sidebar");
         $(".sidebar-head .open-close i").toggleClass("ti-menu");
+       	if($(window).width()>1170){
+       	 	$(".pageWrapper_top").toggleClass("pageWrapper_topR")
+       	}else{
+       		console.log("none")
+       	}
     });
 
     /* ===== Open-Close Right Sidebar ===== */
@@ -59,12 +64,26 @@ $(document).ready(function () {
                 }
 
                 /* ===== This is for resizing window ===== */
-
+				if(width > 1170){
+					$("body").addClass("fix-header show-sidebar hide-sidebar")
+					if($("body").attr("class")=="fix-header show-sidebar hide-sidebar"){
+						$(".pageWrapper_top").removeClass("pageWrapper_topR")
+					}else{
+						$(".pageWrapper_top").addClass("pageWrapper_topR")
+					}
+				}
                 if (width < 1170) {
+                	$("body").addClass("fix-header show-sidebar hide-sidebar")
+					if($("body").attr("class")=="fix-header show-sidebar hide-sidebar"){
+						$(".pageWrapper_top").removeClass("pageWrapper_topR")
+					}else{
+						$(".pageWrapper_top").addClass("pageWrapper_topR")
+					}
                     body.addClass('content-wrapper');
                     $(".sidebar-nav, .slimScrollDiv").css("overflow-x", "visible").parent().css("overflow", "visible");
                 } else {
                     body.removeClass('content-wrapper');
+                    $(".pageWrapper_top").removeClass("pageWrapper_topR")
                 }
 
                 height = height - topOffset;

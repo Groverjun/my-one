@@ -52,8 +52,8 @@
 										<span class="hide-menu">首页 </span>
 									</router-link>
 								</li>
-								<li>
-									<router-link to="Choice" class="waves-effect">
+								<li id="show">
+									<router-link to="Choice" class="waves-effect" v-if="conceal">
 										<span class="hide-menu">着落页模板 </span>
 									</router-link>
 								</li>
@@ -81,7 +81,8 @@ export default {
   name: 'app',
   data () {
     return {
-      UserName: '山东信融'
+      UserName: '山东信融',
+      conceal:true
     }
   },
   mounted(){

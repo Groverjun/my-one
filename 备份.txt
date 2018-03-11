@@ -1,0 +1,15 @@
+$.ajax({
+	type:"post",
+	url:"http://up.imgapi.com/",
+	data:formData,
+	cache: false,
+    contentType: false,
+    processData: false,
+    success: function(data){
+		console.log(data);
+		 get_data(this.result,formData); 
+	},
+    error: function(data){
+		console.log(data);
+	},
+});
