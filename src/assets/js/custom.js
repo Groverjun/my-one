@@ -20,7 +20,6 @@ $(document).ready(function () {
        	if($(window).width()>1170){
        	 	$(".pageWrapper_top").toggleClass("pageWrapper_topR")
        	}else{
-       		console.log("none")
        	}
     });
 
@@ -57,6 +56,9 @@ $(document).ready(function () {
                     width = (window.innerWidth > 0) ? window.innerWidth : this.screen.width,
                     height = ((window.innerHeight > 0) ? window.innerHeight : this.screen.height) - 1;
                 if (width < 768) {
+                	console.log("000")
+                	$("body").addClass("fix-header show-sidebar hide-sidebar")
+					$(".pageWrapper_top").removeClass("pageWrapper_topR")
                     $('div.navbar-collapse').addClass('collapse');
                     topOffset = 100; /* 2-row-menu */
                 } else {
@@ -66,24 +68,15 @@ $(document).ready(function () {
                 /* ===== This is for resizing window ===== */
 				if(width > 1170){
 					$("body").addClass("fix-header show-sidebar hide-sidebar")
-					if($("body").attr("class")=="fix-header show-sidebar hide-sidebar"){
-						$(".pageWrapper_top").removeClass("pageWrapper_topR")
-					}else{
-						$(".pageWrapper_top").addClass("pageWrapper_topR")
-					}
+					$(".pageWrapper_top").removeClass("pageWrapper_topR")
 				}
                 if (width < 1170) {
                 	$("body").addClass("fix-header show-sidebar hide-sidebar")
-					if($("body").attr("class")=="fix-header show-sidebar hide-sidebar"){
-						$(".pageWrapper_top").removeClass("pageWrapper_topR")
-					}else{
-						$(".pageWrapper_top").addClass("pageWrapper_topR")
-					}
+					$(".pageWrapper_top").removeClass("pageWrapper_topR")
                     body.addClass('content-wrapper');
                     $(".sidebar-nav, .slimScrollDiv").css("overflow-x", "visible").parent().css("overflow", "visible");
                 } else {
                     body.removeClass('content-wrapper');
-                    $(".pageWrapper_top").removeClass("pageWrapper_topR")
                 }
 
                 height = height - topOffset;
