@@ -5,7 +5,7 @@ import Choice from '@/components/Choice'
 import preview from '@/components/preview'
 import details from '@/components/details'
 import swiper from '@/components/swiper'
-import operation from '@/components/Template/model1/operation'
+import operation1 from '@/components/Template/model1/operation'
 import operation2 from '@/components/Template/model2/operation'
 Vue.use(Router)
 
@@ -14,11 +14,19 @@ export default new Router({
    {
       path: '/',
       name: 'home',
+      params: { 
+                name: 'name', 
+                dataObj: 1
+            },
       component: home
     },
     {
       path: '/home',
       name: 'home',
+       params: { 
+                name: 'name', 
+                dataObj: 1
+            },
       component: home
     },
     {
@@ -32,9 +40,9 @@ export default new Router({
       component: preview
     },
     {
-      path: '/operation',
-      name: 'operation',
-      component: operation
+      path: '/operation1',
+      name: 'operation1',
+      component: operation1
     },
     {
       path: '/operation2',

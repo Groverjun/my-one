@@ -126,10 +126,37 @@
 
 
 /**home**/
-
+.fenye{
+	margin-bottom: 20px;
+}
 .title_h2 {
 	padding: 10px;
 	text-align: left;
 	background: #01b8ff;
 	color: #fff;
+}
+
+.choice_top{
+	background: #fff;
+	padding: 20px;
+}
+.choice_topAbt .btn-danger, .btn-danger.disabled{
+	background: none;
+	border: 1px dashed #00AEEF;
+	color: #00AEEF;
+}
+.module_img{
+	background: #fff;
+	padding: 20px;
+	margin-bottom: 20px;
+	
+}
+.module_imgBox{
+	height:400px ;
+	overflow: hidden;
+	border: 2px solid #fff;
+	margin-bottom: 15px;
+}
+.module_imgBox:hover{
+	border: 2px solid #00AFF0;
 }

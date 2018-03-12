@@ -4,7 +4,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6">
-						<p style="line-height: 35px;">模板一</p>
+						<p style="line-height: 35px;">模板二</p>
 					</div>
 					<div class="col-md-6 text-right" style="padding-right: 30px;">
 						<a href="#/Choice">退出模板</a>
@@ -28,14 +28,7 @@
 			</div>
 		</div>
 		<div class="pageWrapperP_box">
-			<div v-loading="Boxloading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading">
-				<img v-bind:src="src"/>
-				<el-button type="primary" class="fileBox" :loading="loading">
-					上传
-					<i class="el-icon-upload el-icon--right"></i>
-					<input type="file"  class="fileStyle" ref="fileThis" @change="file($refs.fileThis,200)"/>
-				</el-button>
-			</div>
+			
 		</div>
 	</div>
 </template>
@@ -57,6 +50,7 @@
     		$(".pageWrapper_top").removeClass("pageWrapper_topR")
     	}else{$(".pageWrapper_top").addClass("pageWrapper_topR")}
     	/***/
+    	console.log(this.$route.params)
     },
     methods: {
     	success(){

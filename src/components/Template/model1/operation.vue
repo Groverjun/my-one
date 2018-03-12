@@ -40,6 +40,7 @@
     		$(".pageWrapper_top").removeClass("pageWrapper_topR")
     	}else{$(".pageWrapper_top").addClass("pageWrapper_topR")}
     	/***/
+    	console.log(this.$route.params)
     },
     methods: {
     	Delete(){

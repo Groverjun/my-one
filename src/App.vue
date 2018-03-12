@@ -86,7 +86,9 @@ export default {
     }
   },
   mounted(){
-	
+		this.$xhr.get("/login/channelInfo").then((res)=>{
+			this.UserName=res.data.sub_company
+		})
   },
   methods:{
   	SignOut(){

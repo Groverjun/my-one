@@ -13,3 +13,8 @@ $.ajax({
 		console.log(data);
 	},
 });
+
+//          query: {
+//              name: 'aa', 
+//              dataObj: this.tel
+//          }
