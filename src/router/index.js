@@ -7,6 +7,7 @@ import details from '@/components/details'
 import swiper from '@/components/swiper'
 import operation1 from '@/components/Template/model1/operation'
 import operation2 from '@/components/Template/model2/operation'
+import operation2Middle from '@/components/Template/model2/operationMiddle'
 Vue.use(Router)
 
 export default new Router({
@@ -48,6 +49,11 @@ export default new Router({
       path: '/operation2',
       name: 'operation2',
       component: operation2
+    },
+    {
+      path: '/operation2Middle',
+      name: 'operation2Middle',
+      component: operation2Middle
     },
     {
       path: '/details',

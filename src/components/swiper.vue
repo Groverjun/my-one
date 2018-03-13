@@ -9,7 +9,6 @@
 					<i class="el-icon-upload el-icon--right"></i>
 				</el-button>
   	</div>
-  	
   	<!---->
   	<el-dialog
 		  title="banner图片上传"
@@ -39,7 +38,7 @@
 <script>
   export default {
     name: 'carrousel',
-    props:["allD"],
+    props:["IFdata"],
     data() {
       return {
       	allDelete:true,
@@ -60,11 +59,12 @@
       }
     },
     mounted(){
-    	
+    	console.log(this.IFdata)
     },
     watch: {  
-		    allD(newValue, oldValue) {  
+		    IFdata(newValue, oldValue) {  
 		       this.allDelete= newValue
+		       console.log(newValue)
 		    }  
 		}, 
  		methods:{
@@ -148,12 +148,15 @@
 		height: 100%;
 		top: 0;
 		left: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		background: rgba(0,0,0,0.5);
 		z-index: 10;
 		display: none;
 	}
 	#bannerImg:hover .banner_show{
-		display: block;
+		display: flex;
 	}
 		.min_banner  ul{
 			padding: 0;

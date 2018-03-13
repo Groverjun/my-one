@@ -251,6 +251,7 @@ export default {
 						state:"",/*状态*/
 						c_id:"",
 						network_id:"",
+						channel_id:"",
 						pageVisitUrl:""
 					},
 				],
@@ -294,16 +295,6 @@ export default {
   		var _this=this
   		console.log(_this.tbodyData2[_this.indexService])/***/
   		var syb_extend=_this.arr2T.join(",")
-  		console.log(JSON.stringify({
-					  "c_id": _this.tbodyData2[_this.indexService].c_id,
-					  "network_id": _this.tbodyData2[_this.indexService].network_id,
-					  "domainIds":_this.checkedCities1 ,
-					  "syb_extend":_this.sybExtend,
-					  "syb_ifShow":syb_extend,
-					  "syb_position":_this.sybPosition,
-					  "syb_productType": _this.productType,
-					  "syb_styleNum": _this.styleRadio
-					}))
 			$.ajax({
 					type:"post",
 					contentType : "application/json;charset=UTF-8",
@@ -320,7 +311,7 @@ export default {
 					  "syb_styleNum": _this.styleRadio
 					}),
 					success:function(str){
-						console.log(str);
+						_this.dialogFormVisible = false
 					}
 			})
   	},
@@ -373,10 +364,13 @@ export default {
     },
   	/**查询*/
   	query(){
-  			this.ajaxData(1,this.CustomerName,this.contactTel,this.state,this.selectionTime,this.channel_id,this)
+  		console.log(this.contactTel)
+			this.ajaxData(1,this.CustomerName,this.contactTel,this.state,this.selectionTime,this.channel_id,this)
+			console.log(this.tbodyData)
   	},
   	/*制作着陆页按钮*/
   	sendParams(index){
+  	localStorage.setItem("data",JSON.stringify(this.tbodyData2[index]))
   	 this.$router.push({
             path: 'Choice', 
             name: 'Choice',
@@ -404,6 +398,7 @@ export default {
   	},
   	/**请求数据**/
   	ajaxData(pages,customer,phone,status,order_time,channel_id,_this){
+  		_this.tbodyData=[]
   		$.ajax({
   			url:"http://192.168.1.140:8081/page/findHomePageData",
 					contentType : 'application/json;charset=UTF-8',
@@ -423,7 +418,7 @@ export default {
 					  _this.total_page=count
 						var str=res.data.list;
 						for(var i in str){
-							_this.tbodyData[i]={
+							_this.tbodyData.push({
 								channelType:str[i].channel_name,
 								Type:"流量卡",
 								CustomerName:str[i].customer_name,
@@ -432,8 +427,9 @@ export default {
 								state:str[i].status,/*状态*/
 								c_id:str[i].customer_id,
 								network_id:str[i].id,
-								pageVisitUrl:str[i].pageVisitUrl
-							}
+								pageVisitUrl:str[i].pageVisitUrl,
+								channel_id:str[i].channel_id
+							})
 						}
 						_this.tbodyData2=_this.tbodyData
 					}

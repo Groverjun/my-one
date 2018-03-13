@@ -5,7 +5,23 @@
 .swiper-slide img{
 	width: 100%;
 }
-
+.pc_abt{
+	font-size: 18px;
+    color: #666;
+    display: inline-block;
+    padding: 10px 20px;
+    font-weight: 600;
+    border-bottom: 2px solid #27abfc;
+    border: none;
+}
+.pc_activ{
+	 border-bottom: 2px solid #27abfc;
+	 color:#27abfc ;
+}
+.pc_activ:hover{
+ border-bottom: 2px solid #27abfc;
+	 color:#27abfc ;
+}
 .pageWrapper_box {
 	padding-top: 60px;
 }
@@ -18,7 +34,21 @@
 	border-top: 1px solid #eee;
 	padding: 10px 0;
 }
+.fileBox{
+	position: relative;
+	overflow: hidden;
+	width: 95px;
+	height: 40px;
+	display: inline-block;
+}
+.fileBox input{
+	opacity: 0;
 
+	position: absolute;
+	top: 0;
+	left: 0;
+	font-size: 100px;
+}
 .pageWrapper_top {
 	width: 100%;
 	padding-top: 5px;

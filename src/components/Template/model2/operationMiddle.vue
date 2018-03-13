@@ -18,32 +18,16 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-md-24 text-center">
-							<a href="javascript:void(0)" class="pc_abt pc_activ">PC端制作</a>
-							<a href="#/operation2Middle" class="pc_abt">移动端制作</a>
+							<a href="#/operation2" class="pc_abt ">PC端制作</a>
+							<a href="javascript:void(0)" class="pc_abt pc_activ">移动端制作</a>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="pageWrapperP_box">
-			<div class="operation_head" 
-				v-loading="loading"  element-loading-text="拼命加载中"
-			    element-loading-spinner="el-icon-loading"
-			    element-loading-background="rgba(0, 0, 0, 0.8)">
-				<img v-bind:src="headImg" width="100%"/>
-				<div class="Mask"  v-if="allDelete">
-					<p>上传图片的宽为1920PX</p>
-					<p>
-						<el-button type="primary "round class="fileBox">
-						上传<i class="el-icon-upload el-icon--right"></i>
-						<input type="file" v-on:change="head($refs.module2Head,1920)" ref="module2Head" />
-					</el-button>
-					 <el-button type="danger" round icon="el-icon-delete" @click="delHead()">删除</el-button>
-					</p>
-				</div>
-			</div>
 			<div class="operation_box" v-model="html">
-				<ul style="width: 1200px; margin: auto;">
+				<ul style="width: 768px; margin: auto;">
 					<li class="Mask_box" v-for="(maskBox,index) in Mask_box">
 						<img v-bind:src="maskBox" width="100%"/>
 						<div class="Mask"  v-if="allDelete">
@@ -61,19 +45,6 @@
 						<el-button type="success" @click="addMask">添加一张</el-button>
 					</li>
 				</ul>
-			</div>
-			<div class="operation_head">
-				<img v-bind:src="footImg" width="100%"/>
-				<div class="Mask" v-if="allDelete">
-					<p>上传图片的宽为1920PX</p>
-					<p>
-						<el-button type="primary "round class="fileBox">
-						上传<i class="el-icon-upload el-icon--right"></i>
-						<input type="file" v-on:change="foot($refs.module2Foot,1920)" ref="module2Foot" />
-						</el-button>
-						<el-button type="danger" round icon="el-icon-delete" @click="delFoot()">删除</el-button>
-					</p>
-				</div>
 			</div>
 			<div id="script" v-html="this.script"></div>
 		</div>
@@ -113,7 +84,7 @@
       	  allDelete:true,
       	  script:'',
       	  dialogFormVisible:true,
-      	  hintText:false,
+      	  hintText:true,
       	  html:$(".operation_box").html(),
       	  headImg:"https://groverjun.github.io/i/head.jpg",
       	  Mask_box:["https://groverjun.github.io/i/middle1.jpg","https://groverjun.github.io/i/middle2.jpg","https://groverjun.github.io/i/middle3.jpg"],
@@ -198,29 +169,6 @@
       		}
       		
       	},
-    	head(input_file,maxWidth){
-    		var _this=this;
-    		this.loading=true;
-    		this.dataImg(_this,input_file,maxWidth,
-	    		function(str){
-	    		_this.headImg=str
-	    	})
-    	},
-    	delHead(){
-    		this.headImg=null
-    	},
-    	delFoot(){
-    		this.footImg=null
-    	},
-    	foot(input_file,maxWidth){
-    		var _this=this;
-    		this.loading=true;
-    		this.loading=true;
-    		this.dataImg(_this,input_file,maxWidth,
-	    		function(str){
-	    		_this.footImg=str
-	    	})
-    	},
     	maskFile(input_file,index,maxWidth){
     		var _this=this;
     		this.loading=true;
@@ -261,7 +209,7 @@
                     reader.onload = function () {
                     	var image = new Image();
                     	image.onload=function(){
-                    		if(maxWidth<=(image.width+10)&&maxWidth>=(image.width-10)){
+                    		if(maxWidth<=image.width&&maxWidth>=(image.width-10)){
                     			/**发送Ajax请求*/
                     			$.ajax({
 			                		type:"post",

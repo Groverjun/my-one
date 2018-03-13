@@ -26,7 +26,7 @@
 				  			<tr v-for="(details,index) in details">
 				  				<th  class="text-center">{{index}}</th>
 				  				<th class="text-center">{{details.pageName}}</th>
-				  				<th class="text-center">{{details.href}}</th>
+				  				<th class="text-center" v-html="details.href"></th>
 				  				<th class="text-center">
 				  					<span v-if="details.state==1">审核通过待制作</span>
 				  					<span v-if="details.state==3">作完成待检查</span>
@@ -74,7 +74,8 @@ export default {
 					_this.details.push({
 						pageName:res.data[i].clientName,
 			      		href:res.data[i].visitUrl,
-			      		state:res.data[i].state
+			      		state:res.data[i].state,
+			      		pageId:res.data[i].id
 					})
 				}
 			},
@@ -88,8 +89,9 @@ export default {
   },
   methods:{
   	newDetails(index){
-  		console.log(index)
-  		this.$router.push({
+  		console.log(this.details[index])
+		localStorage.setItem("pageId",this.details[index].id)
+		this.$router.push({
 	        path: 'Choice', 
 	        name: 'Choice',
 	        params:{
