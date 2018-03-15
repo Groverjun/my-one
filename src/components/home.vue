@@ -1,5 +1,8 @@
 <template>
-  <div class="container">
+  <div class="container"  v-loading="loading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)">
   		<div class="row">
 					<div class="col-md-12">
 						<p class="index_title"><span class="index_span"></span><span class="companyName"></span>{{this.UserName}}</p>
@@ -13,7 +16,7 @@
 						    <div class="form-group">
 							    <label for="name" class="col-sm-4 control-label  CustomerName">客户名称：</label>
 							    <div class="col-sm-8">
-							    	<el-input placeholder="客户名称 " v-model='CustomerName'></el-input>
+							    	<el-input placeholder="客户名称 " v-model.trim='CustomerName'></el-input>
 							    </div>
 							 </div>
 						</div>
@@ -23,7 +26,7 @@
 						    <div class="form-group">
 							    <label for="tel" class="col-sm-4 control-label">联系电话：</label>
 							    <div class="col-sm-8">
-							     <el-input placeholder="电话" v-model='contactTel'></el-input>
+							     <el-input placeholder="电话" v-model.trim='contactTel'></el-input>
 							    </div>
 							 </div>
 						</div>
@@ -54,6 +57,7 @@
 									    <el-date-picker
 									      v-model="selectionTime"
 									      type="date"
+									      format="yyyy 年 MM 月 dd 日"
 									      placeholder="选择日期" style="display: block;width: 100%;">
 									    </el-date-picker>
 									  </div>
@@ -71,7 +75,7 @@
 			  <table class="table  table-bordered ">
 			  		<thead>
 			  			<tr>
-			  				<th  class="text-center">序号</th>
+			  				<!--<th  class="text-center">序号</th>-->
 			  				<th class="text-center">渠道类型</th>
 			  				<th class="text-center">类型</th>
 			  				<th class="text-center">客户名称</th>
@@ -83,7 +87,7 @@
 			  		</thead>
 			  		<tbody>
 			  			<tr v-for="(tbodyData,index) in tbodyData2">
-			  				<th class="text-center">{{index}}</th>
+			  				<!--<th class="text-center">{{index}}</th>-->
 			  				<th class="text-center">{{tbodyData.channelType}}</th>
 			  				<th class="text-center">{{tbodyData.Type}}</th>
 			  				<th class="text-center">{{tbodyData.CustomerName}}</th>
@@ -97,10 +101,15 @@
 			  				<th class="text-center">{{tbodyData.contactTel}}</th>
 			  				<th class="text-center">{{tbodyData.selectionTime}}</th>
 			  				<th class="text-center" id="primary">
-			  					<el-button type="primary" @click="sendParams(index)" size="mini">着陆页制作 </el-button>
 			  					<span v-if="tbodyData.pageVisitUrl!=null">
-			  						<el-button type="primary" size="mini" @click="onlineService(index)">在线客服  </el-button>
-			  						<el-button type="primary" size="mini" @click="details(index)">维护 </el-button>
+			  						<el-button type="primary"  plain @click="sendParams(index)" size="mini" >再制作 </el-button>
+			  					</span>
+			  					<span v-else="tbodyData.pageVisitUrl!=null">
+			  						<el-button type="primary" plain @click="sendParams(index)" size="mini" >着陆页在制作 </el-button>
+			  					</span>
+			  					<span v-if="tbodyData.pageVisitUrl!=null">
+			  						<el-button type="primary" plain size="mini" @click="onlineService(index)">在线客服  </el-button>
+			  						<el-button type="primary" plain size="mini" @click="details(index)">维护 </el-button>
 			  					</span>
 			  				</th>
 			  			</tr>
@@ -199,7 +208,8 @@ export default {
     	checkedCities:[],
     	checkedCities1: ["1"],
     	PageCount:10,
-    	total_page:100,
+    	total_page:0,
+    	loading:true,
       cities:[
       	{id:"1",source:360}
       ],
@@ -232,9 +242,9 @@ export default {
         ],
     	/*状态拉框**/
 				styleRadioArr: [
-					{ value: '0',label: '==请选择=='},
+					{ value: null,label: '==请选择=='},
 	        { value: '1',label: '审核通过待制作'},
-	        { value: '3',label: '作完成待检查'},
+	        { value: '3',label: '制作完成待检查'},
 	        { value: '4',label: '检查不合格'},
 	        { value: '6',label: '上线完成'},
 				],
@@ -267,38 +277,35 @@ export default {
     }
   },
   mounted(){
-//	console.log(this.$route.params)
   	$("#show").hide()
   	/*获取登录数据**/
 			this.$xhr.get("/login/channelInfo").then((res)=>{
-				console.log(res)
+//				console.log(res)
 				this.UserName=res.data.sub_company;
 				this.channel_id=res.data.channel_id;
 				this.ajaxData(this.pages,this.CustomerName,this.contactTel,this.state,this.selectionTime,this.channel_id,this)
 			})
 			/*获取投放域名**/
 			this.$xhr.get("/page/findDomainNames").then((res)=>{
-				console.log(res)
 				for(var i in res.data){
 					this.cities[i]={
 						id:res.data[i].id,
 						source:res.data[i].source
 					}
 				}
-				console.log(this.cities)
 			})
   },
   methods:{
   	/*提交在线客服**/
   	Determine(){
-  		console.log(this.arr2T)/*在线客服列表**/
+  		/*在线客服列表console.log(this.arr2T)**/
   		var _this=this
-  		console.log(_this.tbodyData2[_this.indexService])/***/
+  		/**console.log(_this.tbodyData2[_this.indexService])*/
   		var syb_extend=_this.arr2T.join(",")
 			$.ajax({
 					type:"post",
 					contentType : "application/json;charset=UTF-8",
-					url:"http://192.168.1.140:8081/page/code/sybCodeUpdate",
+					url:_this.apiUrl.apiUrl+"/page/code/sybCodeUpdate",
 					async:true,
 					data:JSON.stringify({
 					  "c_id": _this.tbodyData2[_this.indexService].c_id,
@@ -318,10 +325,10 @@ export default {
   	/*生意帮代码回显**/
   	onlineService(index){
   		this.indexService=index
-  		console.log(this.tbodyData2[index].c_id)
+//		console.log(this.tbodyData2[index].c_id)
   		var _this=this
 			$.ajax({
-				url:"http://192.168.1.140:8081/page/code/sybCode",
+				url:_this.apiUrl.apiUrl+"/page/code/sybCode",
 					contentType : 'application/json;charset=UTF-8',
 	    		type:"post",
 					async:true,
@@ -334,6 +341,7 @@ export default {
 						_this.productType=res.data.codeEntity.sybProducttype;
 						_this.styleRadio=res.data.codeEntity.sybStylenum
 						_this.checkedCities1=JSON.parse(res.data.domainIds)
+						_this.checkedCities=[]
 						var arr=res.data.codeEntity.sybIfshow;
 						arr=arr.split(",")
 						_this.arr2T=arr
@@ -342,6 +350,7 @@ export default {
 								_this.checkedCities.push(i)
 							}
 						}
+//						console.log(_this.checkedCities)
 					}
 				
 			})
@@ -364,9 +373,9 @@ export default {
     },
   	/**查询*/
   	query(){
-  		console.log(this.contactTel)
+//		console.log(this.contactTel)
 			this.ajaxData(1,this.CustomerName,this.contactTel,this.state,this.selectionTime,this.channel_id,this)
-			console.log(this.tbodyData)
+//			console.log(this.tbodyData)
   	},
   	/*制作着陆页按钮*/
   	sendParams(index){
@@ -382,6 +391,7 @@ export default {
   	},
   	/*制作详情页按钮*/
   	details(index){
+  		localStorage.setItem("data",JSON.stringify(this.tbodyData2[index]))
   		  	 this.$router.push({
             path: 'details', 
             name: 'details',
@@ -399,8 +409,9 @@ export default {
   	/**请求数据**/
   	ajaxData(pages,customer,phone,status,order_time,channel_id,_this){
   		_this.tbodyData=[]
+  		this.loading=false
   		$.ajax({
-  			url:"http://192.168.1.140:8081/page/findHomePageData",
+  			url:_this.apiUrl.apiUrl+"/page/findHomePageData",
 					contentType : 'application/json;charset=UTF-8',
     			type:"post",
 			    dataType: 'json',
@@ -413,8 +424,14 @@ export default {
 						  "status": status
 					}),
 					success:function(res){
-						console.log(res)
-						var count=res.data.count
+//						console.log(res)
+						if(res.data!=null){
+							var count=res.data.count
+							_this.total_page=count
+						}else{
+//							alert("网络异常")
+							return
+						}
 					  _this.total_page=count
 						var str=res.data.list;
 						for(var i in str){
@@ -432,6 +449,7 @@ export default {
 							})
 						}
 						_this.tbodyData2=_this.tbodyData
+						_this.loading=false;
 					}
   			
   		})

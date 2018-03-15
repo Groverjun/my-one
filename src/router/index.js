@@ -2,12 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import home from '@/components/home'
 import Choice from '@/components/Choice'
-import preview from '@/components/preview'
+import preview1 from '@/components/preview1'
+import preview2 from '@/components/preview2'
 import details from '@/components/details'
-import swiper from '@/components/swiper'
 import operation1 from '@/components/Template/model1/operation'
 import operation2 from '@/components/Template/model2/operation'
-import operation2Middle from '@/components/Template/model2/operationMiddle'
+import operation2Middle from '@/components/Template/model1/operationMiddle'
 Vue.use(Router)
 
 export default new Router({
@@ -36,9 +36,14 @@ export default new Router({
       component: Choice
     },
     {
-      path: '/preview',
-      name: 'preview',
-      component: preview
+      path: '/preview1',
+      name: 'preview1',
+      component: preview1
+    },
+    {
+      path: '/preview2',
+      name: 'preview2',
+      component: preview2
     },
     {
       path: '/operation1',
@@ -59,11 +64,6 @@ export default new Router({
       path: '/details',
       name: 'details',
       component: details
-    },
-    {
-      path: '/swiper',
-      name: 'swiper',
-      component: swiper
     },
   ]
 })

@@ -4,6 +4,7 @@
     	<swiper-slide v-for="arr in bannerImg"><img v-bind:src="arr"/></swiper-slide>
   	</swiper>
   	<div class="banner_show text-center" v-if="allDelete">
+  		<p class="text-center" style="color: #fff; font-size: 26px;">上传banner图片的宽为1920</p>
   			<el-button type="primary" class="fileBox" :loading="loading" @click="centerDialogVisible = true">
 					上传
 					<i class="el-icon-upload el-icon--right"></i>
@@ -16,6 +17,7 @@
 		  v-if="allDelete"
 		 >
 		  <div class="min_banner">
+		  		<p class="text-center" style="font-size: 24px;">上传图片的宽为1920</p>
 		  	<ul class="clearfix">
 		  		<li class="pull-left" v-for="(arr,index) in bannerImg">
 		  			<img v-bind:src="arr"  />
@@ -46,10 +48,10 @@
       	centerDialogVisible: false,
       	frontPoints:0,
       	bannerImg:[
-      		"https://s17.postimg.org/tjkj6r3lb/banner.jpg",
-      		"https://s17.postimg.org/tjkj6r3lb/banner.jpg",
-      		"https://s17.postimg.org/tjkj6r3lb/banner.jpg",
-      		"https://s17.postimg.org/tjkj6r3lb/banner.jpg",
+      		"http://ad.wayboo.net.cn/common/img/i/banner.jpg",
+      		"http://ad.wayboo.net.cn/common/img/i/banner.jpg",
+      		"http://ad.wayboo.net.cn/common/img/i/banner.jpg",
+      		"http://ad.wayboo.net.cn/common/img/i/banner.jpg",
       	],
         swiperOption: {
 			  autoplay : {
@@ -77,8 +79,8 @@
 		    		var _this=this;
 		    		this.loading=true
 		    		this.dataImg(_this,input_file,maxWidth,
-			    		function(data,str){
-			    	  _this.bannerImg[index]=data
+			    		function(str){
+			    	  _this.bannerImg[index]=str
 			    	})
 		    	},
 		    	bannerDel(index){
@@ -115,10 +117,23 @@
 			                	image.onload=function(){
 			                		if(maxWidth<=(image.width+10)&&maxWidth>=(image.width-10)){
 			                			/**发送Ajax请求*/
-			                			txt="上传成功";h1="成功"
-			                			_this.open(txt,h1)
-			                			_this.loading=false
-			                			get_data(image.src,formData); 
+                    			$.ajax({
+				                		type:"post",
+				                		url:"http://192.168.1.140:8081/file/saveImage",
+				                		data: formData,
+			                 			dataType : "json",
+			                 			async: false,
+		                    		contentType: false,
+		                    		processData: false,
+														success:function(str){
+															console.log(str)
+		                    			_this.loading=false;
+		                    			get_data(str.data); 
+														},
+														error:function(){
+															
+														}
+			                		});
 			                		}else{
 			                			/**宽不正确*/
 			                			 txt="上传图片的宽为"+maxWidth+"PX"; h1="失败"
@@ -149,6 +164,7 @@
 		top: 0;
 		left: 0;
 		display: flex;
+		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		background: rgba(0,0,0,0.5);

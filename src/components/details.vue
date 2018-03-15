@@ -1,5 +1,5 @@
 <template>
-	<div id="details">
+	<div class="details">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
@@ -28,10 +28,10 @@
 				  				<th class="text-center">{{details.pageName}}</th>
 				  				<th class="text-center" v-html="details.href"></th>
 				  				<th class="text-center">
-				  					<span v-if="details.state==1">审核通过待制作</span>
-				  					<span v-if="details.state==3">作完成待检查</span>
-				  					<span v-if="details.state==4">检查不合格</span>
-				  					<span v-if="details.state==6">上线完成</span>
+				  					<span v-if="details.state==0">未审核</span>
+				  					<span v-if="details.state==1">已通过</span>
+				  					<span v-if="details.state==2">未通过[{{details.checkInfo}}]</span>
+				  					<span v-if="details.state==3">暂未使用</span>
 				  				</th>
 				  				<th class="text-center"><el-button type="primary" size="mini" @click="newDetails(index)">重做 </el-button></th>
 				  			</tr>
@@ -45,52 +45,56 @@
 
 <script>
 export default {
-  name: 'details',
+  name: '',
   data () {
     return {
       indexData:null,
       UserName:null,
+      pageId:null,
       details:[]
     }
   },
   mounted(){
-    console.log(this.$route.params.customerName)
+//  console.log(this.$route.params.customerName)
     this.UserName=this.$route.params.UserName;
     var _this=this
-    this.indexData=this.$route.params.customerName
+    this.indexData=JSON.parse(localStorage.getItem("data"))
+//  console.log(this.apiUrl.apiUrl)
+    var a='http://192.168.1.140:8081'
     $.ajax({
-    	contentType : 'application/json;charset=UTF-8',
-			type:"get",
-		  dataType: 'json',
-			url:"http://192.168.1.140:8081/page/findPages",
-			async:true,
-			data:{
-			  "cid": _this.indexData.c_id,
-			  "orderId":_this.indexData.network_id,
-			},
-			success:function(res){
-				console.log(res)
-				for(var i in res.data){
-					_this.details.push({
-						pageName:res.data[i].clientName,
-			      		href:res.data[i].visitUrl,
-			      		state:res.data[i].state,
-			      		pageId:res.data[i].id
-					})
-				}
-			},
-			error(){
-				_this.$router.push({
-		            path: 'home', 
-		            name: 'home',
-		        })
+    	contentType :'application/json;charset=UTF-8',
+		type:"get",
+		dataType: 'json',
+		url:_this.apiUrl.apiUrl+"/page/findPages",
+		async:true,
+		data:{
+		  "cid": _this.indexData.c_id,
+		  "orderId":_this.indexData.network_id,
+		},
+		success:function(res){
+//				console.log(res)
+			for(var i in res.data){
+				_this.details.push({
+					pageName:res.data[i].clientName,
+		      		href:res.data[i].visitUrl,
+		      		state:res.data[i].state,
+		      		pageId:res.data[i].id
+				})
 			}
+		},
+		error(){
+			_this.$router.push({
+	            path: 'home', 
+	            name: 'home',
+	        })
+		}
     });
   },
   methods:{
   	newDetails(index){
-  		console.log(this.details[index])
-		localStorage.setItem("pageId",this.details[index].id)
+//		console.log(this.details[index].pageId)
+		localStorage.setItem("pageId",this.details[index].pageId)
+//		console.log(this.details[index])
 		this.$router.push({
 	        path: 'Choice', 
 	        name: 'Choice',

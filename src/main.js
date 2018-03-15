@@ -9,9 +9,13 @@ Vue.use(ElementUI)
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/dist/css/swiper.css'
 Vue.use(VueAwesomeSwiper)
+import'./assets/css/icons/font-icons/iconfont.css'
 import'./assets/css/bootstrap/dist/css/bootstrap.min.css'
 import'./assets/css/custom.css'
 import './assets/js/jquery.min.js'
+import './assets/js/jquery.cookie.js'
+import apiUrl from './assets/js/url.js'
+Vue.prototype.apiUrl = apiUrl
 import'./assets/css/bootstrap/dist/js/bootstrap.min.js'
 import'./assets/js/sidebar-nav.min.js'
 import'./assets/js/jquery.slimscroll.js'

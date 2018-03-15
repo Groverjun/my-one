@@ -1,9 +1,18 @@
 #page-wrapper {}
 
 #preview {}
-
+.inputRed{
+	border:1px solid #f56c6c;
+}
 .swiper-slide img{
 	width: 100%;
+}
+.module_txt{
+	padding: 20px 60px 0;
+	margin-top: 20px;
+}
+.module_txt ul li {
+	margin-bottom: 15px;
 }
 .pc_abt{
 	font-size: 18px;

@@ -4,13 +4,13 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6">
-						<p style="line-height: 35px;">模板二</p>
+						<p style="line-height: 35px;">通用模板</p>
 					</div>
 					<div class="col-md-6 text-right" style="padding-right: 30px;">
 						<a href="#/Choice">退出模板</a>
 						<a href="javascript:void(0)" onclick="javascript:location.reload();">重做</a>
 						<el-button type="primary" v-if="ImmediateUse" @click="ImmediateUseclick">立即使用</el-button>
-						<el-button type="primary" v-if="Submit"  @click="Submitclick">提交并发布</el-button>
+						<el-button type="primary" v-if="Submit"  v-bind:disabled="disabled"  @click="Submitclick">提交并发布</el-button>
 					</div>
 				</div>
 			</div>
@@ -18,7 +18,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-md-24 text-center">
-							<a href="#/operation2" class="pc_abt ">PC端制作</a>
+							<a href="#/operation1" class="pc_abt ">PC端制作</a>
 							<a href="javascript:void(0)" class="pc_abt pc_activ">移动端制作</a>
 						</div>
 					</div>
@@ -26,16 +26,18 @@
 			</div>
 		</div>
 		<div class="pageWrapperP_box">
-			<div class="operation_box" v-model="html">
+			<div id="operation_box" v-model="html">
 				<ul style="width: 768px; margin: auto;">
-					<li class="Mask_box" v-for="(maskBox,index) in Mask_box">
+					<li class="Mask_box" v-for="(maskBox,index) in Mask_box" v-loading="loading"  element-loading-text="拼命加载中"
+			    element-loading-spinner="el-icon-loading"
+			    element-loading-background="rgba(0, 0, 0, 0.8)">
 						<img v-bind:src="maskBox" width="100%"/>
 						<div class="Mask"  v-if="allDelete">
-							<p>上传图片的宽为1200PX</p>
+							<p>上传图片的宽为750PX</p>
 							<p>
 								<el-button type="primary "round class="fileBox">
 								上传<i class="el-icon-upload el-icon--right"></i>
-								<input type="file" v-on:change="maskFile($refs.module2mask[index],index,1200)" ref="module2mask" />
+								<input type="file" v-on:change="maskFile($refs.module2mask[index],index,750)" ref="module2mask" />
 								</el-button>
 								<el-button type="danger" round icon="el-icon-delete" @click="delMask(index)">删除</el-button>
 							</p>
@@ -45,27 +47,46 @@
 						<el-button type="success" @click="addMask">添加一张</el-button>
 					</li>
 				</ul>
+				<div id="script" v-html="this.script"></div>
 			</div>
-			<div id="script" v-html="this.script"></div>
+			
 		</div>
 		<!--提示框-->
-		<el-dialog title="注意事项" :visible.sync="dialogFormVisible">
-		  <el-form>
-		    <el-form-item label="">
-		    	 <el-input  v-model="description" placeholder="请输入模板名称"  :maxlength="20">
-				    <template slot="append"><span>{{this.description.length}}</span>/20</template>
-				  </el-input>
-		          <el-alert title="请输入模板名称"  type="error" show-icon v-if="hintText" style="height: 35px;margin-top: 5px;"> </el-alert>
-		          <el-alert  title="1. 不能出现联系方式： 包括手机号，座机号，QQ号，邮箱，其他网址；"  type="info" show-icon style="height: 35px;margin-top: 5px;"></el-alert>
-		          <el-alert  title="2. 不能出现公司名称及所在地域名称；"  type="info" show-icon style="height: 35px;margin-top: 5px;"></el-alert>
-		          <el-alert  title="3. 不要出现资质图片，如要添加，图片上的公司信息需加马赛克。"  type="info" show-icon style="height: 35px;margin-top: 5px;"></el-alert>
-		          <el-alert  title="如不规范将不予通过！建议再仔细审核一遍！"  type="warning" show-icon style="height: 35px;margin-top: 5px;"></el-alert>
-		    </el-form-item>
-		  </el-form>
-		  <div slot="footer" class="dialog-footer text-center">
-		    <el-button @click="dialogFormVisible = false">取 消</el-button>
-		    <el-button type="primary" @click="Prompt">确 定</el-button>
+		<el-dialog title="" :visible.sync="dialogFormVisible" width="35%" >
+		  <div class="text-center" style="font-weight: bold;color:red ;font-size: 20px;" v-show="waning">
+		  	<p>请在注意审核一下注意事项！</p>
+		  	<p>如不通过将不予通过</p>
 		  </div>
+		  <div class="text-center" v-show="!waning">
+		  	       页面名称：
+		  		<input type="text" v-bind:class="{inputRed:classRed}" placeholder="请输入页面名称：" v-model.trim="description" :maxlength="20" style="width:400px;height: 45px;"/>
+				<i style="display: inline-block;font-style: normal;position: relative;left: -50px;">
+				 	 <span v-html="descriptionNumber"></span>/20
+				</i>
+				<p class="text-left" style="width: 370px;margin: auto;color: #f56c6c;margin-top: 10px;" v-if="classRed"><i class="el-icon-warning" style="padding-right: 5px;"></i>请输入页面名称</p>
+		  </div>
+		  <p style="position: absolute;width: 100%;border-bottom: 1px dashed #ccc;left: 0;margin: 20px 0;"></p>
+		  <div class="module_txt">
+		  	<p><i  class="el-icon-warning" style="padding-right: 5px;color:#f56c6c;"></i>模板制作注意事项：</p>
+		  	<ul>
+		  		<li>1.不能出现联系方式： 包括手机号，座机号，QQ号，邮箱，其他网址；</li>
+		  		<li>2.不能出现公司名称及所在地域名称；</li>
+		  		<li>3.不要出现资质图片，如要添加，图片上的公司信息需加马赛克。</li>
+		  	</ul>
+		  </div>
+		  <div slot="footer" class="dialog-footer text-center">
+		   <el-button type="primary" plain @click="Prompt" v-show='!waning'>使用该模板</el-button>
+			    <el-button type="primary" plain v-show='waning' @click="dialogFormVisible=false">审核</el-button>
+		  </div>
+		</el-dialog>
+		
+		<el-dialog :visible.sync="dialogVisible"  width="30%">
+		  <div class="text-center" v-html="Release"></div>
+		  <div slot="footer" class="text-center">
+		    <el-button type="primary" onclick="javascript:location.reload();" v-if="againLading">重新加载</el-button>
+		    <el-button type="primary" @click="Return" v-else="againLading">确 定</el-button>
+		  </div>
+		 
 		</el-dialog>
 	</div>
 </template>
@@ -76,21 +97,33 @@
       return {
       	  indexData:null,/*首页数据**/
       	  pageId:null,/*详情页传的ID**/
-      	  description:'000',/*模板名称**/
+      	  description:null,/*模板名称**/
+      	  descriptionNumber:0,
       	  Boxloading:false,
       	  loading:false,
       	  ImmediateUse:true,
       	  Submit:false,
       	  allDelete:true,
+      	  dialogVisible:false,
       	  script:'',
       	  dialogFormVisible:true,
-      	  hintText:true,
-      	  html:$(".operation_box").html(),
-      	  headImg:"https://groverjun.github.io/i/head.jpg",
-      	  Mask_box:["https://groverjun.github.io/i/middle1.jpg","https://groverjun.github.io/i/middle2.jpg","https://groverjun.github.io/i/middle3.jpg"],
-      	  footImg:"https://groverjun.github.io/i/foot.jpg"
+      	  hintText:false,
+      	  Release:'<p style="font-size: 20px;color: rgba(30,125,253);font-weight: bold;">发布成功</p><p>请在首页<a href="#/home" style="font-style: normal;color: rgba(30,125,253);">[着陆页网址]</a>中查看网址~</p>',
+      	  classRed:false,
+      	  waning:false,
+      	  againLading:false,
+      	  disabled:false,
+      	  html:$("#operation_box").html(),
+      	  headImg:"http://ad.wayboo.net.cn/common/img/i/head.jpg",
+      	  Mask_box:["http://ad.wayboo.net.cn/common/img/i/middle1.jpg","http://ad.wayboo.net.cn/common/img/i/middle2.jpg","http://ad.wayboo.net.cn/common/img/i/middle3.jpg"],
+      	  footImg:"http://ad.wayboo.net.cn/common/img/i/foot.jpg"
       };
     },
+     watch: {  
+		description(newValue, oldValue) {  
+		       this.descriptionNumber= newValue.length
+		    }  
+	},
     mounted(){
     	/***/
     	if($("body").attr("class")=="fix-header show-sidebar hide-sidebar"){
@@ -99,7 +132,7 @@
     	/***/
     	this.indexData=JSON.parse(localStorage.getItem("data"))
     	this.pageId=localStorage.getItem("pageId")
-    	console.log(this.indexData)
+//  	console.log(this.indexData)
     },
     methods: {
     	open(txt,h1) {
@@ -107,14 +140,23 @@
 	          confirmButtonText: '确定',
 	        });
       	},
+      	Return(){
+      		localStorage.clear()
+  		  	 this.$router.push({
+	            path: 'home', 
+	            name: 'home',
+	        })
+      	},
       	/**获取生意帮代码*/
       	ImmediateUseclick(){
       		this.dialogFormVisible=true;
+      		this.allDelete=false;
+      		this.waning=true
       		var _this=this;
   			$.ajax({
 				type:"post",
 				dataType:"json",
-				url:"http://192.168.1.140:8081/page/code/sybCode",
+				url:_this.apiUrl.apiUrl+"/page/code/sybCode",
 				contentType : 'application/json;charset=UTF-8',
 				data:JSON.stringify({
 				  "c_id":_this.indexData.c_id,
@@ -122,7 +164,7 @@
 				}),
 				success:function(res){
 					_this.script=res.data.codeEntity.sybCreateCode;
-					console.log(_this.script)
+//					console.log(_this.script)
 					_this.ImmediateUse=false;
 					_this.Submit=true;
 				},
@@ -133,39 +175,54 @@
       	},
       	/**提交*/
       	Submitclick(){
-      		console.log(this.html)
+      		if(this.pageId=='undefined'){
+      			this.pageId=null;
+      		}
+      		this.disabled=true;
+//    		console.log(this.pageId)
       		var _this=this
+      		this.allDelete=false
       		$.ajax({
       			type:"post",
 				dataType:"json",
 				contentType : 'application/json;charset=UTF-8',
-				url:"http://192.168.1.140:8081/page/createHtmlPage",
+				url:_this.apiUrl.apiUrl+"/page/createHtmlPage",
 				data:JSON.stringify({
                     "channelId": _this.indexData.channel_id,/*渠道ID**/
                     "clientId": _this.indexData.c_id,/*客户customer_id  ID**/
-                    "modelType":0,/*模板类型**/
+                    "modelType":1,/*模板类型**/
                     "clientName": _this.indexData.CustomerName,/*客户名称**/
-                    "htmlCode": _this.html,/*html代码**/
+                    "htmlCode":$("#operation_box").html(),/*html代码**/
                     "modelId": 2,/*模板id**/
                     "orderId":_this.indexData.network_id,/*流量卡ID**/
-                    "description ":null,
+                    "description":_this.description,
 				    "pageId":_this.pageId,
 				}),
 				success:function(res){
-					console.log(res)
+//					console.log(res)
+					if(res.status==500){
+						alert("着陆页数量不能大于5个")
+						_this.$router.push({
+				            path: 'home', 
+				            name: 'home',
+				        })
+					}else{
+						_this.dialogVisible=true
+					}
 				},
 				error:function(err){
-					console.log(err)
+					_this.Release='<p style="font-size: 20px;color: rgba(30,125,253);font-weight: bold;">网络异常</p><p>也许他想静静~</p>'
+					_this.againLading=true;
 				}
       		})
       	},
       	/*提示框**/
       	Prompt(){
-      		if(this.description==null){
-      			this.hintText=true;
+      		if(this.description==null||this.description==''){
+      			this.classRed=true;
       		}else{
       			this.dialogFormVisible = false;
-      			this.hintText=false;
+      			this.classRed=false;
       		}
       		
       	},
@@ -179,10 +236,10 @@
 	    	})
     	},
     	addMask(){
-    		this.Mask_box.push("https://groverjun.github.io/i/middle1.jpg")
+    		this.Mask_box.push("http://ad.wayboo.net.cn/common/img/i/middle1.jpg")
     	},
     	delMask(index){
-    		console.log(index)
+//  		console.log(index)
     		this.Mask_box.splice(index,1)
     	},
     	/*上传图片**/
@@ -213,16 +270,16 @@
                     			/**发送Ajax请求*/
                     			$.ajax({
 			                		type:"post",
-			                		url:"http://192.168.1.140:8081/file/saveImage",
+			                		url:_this.apiUrl.apiUrl+"/file/saveImage",
 			                		data: formData,
 		                 			dataType : "json",
 		                 			async: false,
 		                    		contentType: false,
 		                    		processData: false,
 									success:function(str){
-										console.log(str)
+//										console.log(str)
 		                    			_this.loading=false;
-		                    			get_data(this.result,str.data); 
+		                    			get_data(str.data); 
 									},
 									error:function(){
 										
@@ -240,7 +297,8 @@
                     }  
                     reader.readAsDataURL(file);  
                 } catch (e) {  
-                    alert('图片转Base64出错啦！' + e.toString());
+                	_this.loading=false
+                    //alert('图片转Base64出错啦！' + e.toString());
                 }  
             }					
 		}

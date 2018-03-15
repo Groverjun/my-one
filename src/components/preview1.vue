@@ -4,17 +4,17 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-md-6">
-							<p style="line-height: 35px;">模板一</p>
+							<p style="line-height: 35px;">通用模板</p>
 						</div>
 						<div class="col-md-6 text-right" style="padding-right: 30px;">
 							<a href="#/Choice">退出预览</a>
-							<el-button type="primary">立即制作</el-button>
+							<el-button type="primary" plain><a href="#/operation1" style=":hover">立即制作</a></el-button>
 						</div>
 					</div>
 				</div>
 		</div>
 		<div class="pageWrapper_box">
-			<p style="height: 2000px;">0000000000000</p>
+			<img src="http://ad.wayboo.net.cn/common/img/modul2.jpg" width="100%"/>
 		</div>
 	</div>
 </template>
@@ -34,3 +34,6 @@
     }
   };
 </script>
+<style type="text/css" >
+	.el-button>span>a:hover{color: #fff;}
+</style>

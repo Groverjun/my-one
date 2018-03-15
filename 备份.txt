@@ -18,3 +18,15 @@ $.ajax({
 //              name: 'aa', 
 //              dataObj: this.tel
 //          }
+
+
+   this.$xhr.post('/page/findPages', {
+	    "cid": _this.indexData.c_id,
+		"orderId":_this.indexData.network_id,
+	})
+	.then(function (response) {
+	    console.log(response);
+	})
+    .catch(function (error) {
+    	console.log(error);
+    });
