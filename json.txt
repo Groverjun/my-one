@@ -1,4 +1,26 @@
-var moduleImg1={
+//通用模板PC
+{
+	head:["http://ad.wayboo.net.cn/common/img/i/head.jpg"],
+	middleImg:[
+		"http://ad.wayboo.net.cn/common/img/i/middle1.jpg",
+		"http://ad.wayboo.net.cn/common/img/i/middle2.jpg",
+		"http://ad.wayboo.net.cn/common/img/i/middle3.jpg",
+	],
+	foot:["http://ad.wayboo.net.cn/common/img/i/foot.jpg"]
+}
+//通用模板移动
+{
+	img:[
+			"http://ad.wayboo.net.cn/common/img/i/middle1.jpg",
+			"http://ad.wayboo.net.cn/common/img/i/middle2.jpg",
+			"http://ad.wayboo.net.cn/common/img/i/middle3.jpg"
+		]
+}
+	
+	
+	
+//自定义模板
+{
 	banner:["http://page-bucket.oiaqye7985.com/img/i/banner.jpg"],
 	headtop_txt:{h1:"热销产品推荐",h2:"我们的优势",h3:"成功案例",h4:"荣誉资质"},
 	product:[
@@ -57,22 +79,11 @@ var moduleImg1={
 	iso:["http://page-bucket.oiaqye7985.com/img/i/abt1.jpg"],
 	steel:["http://page-bucket.oiaqye7985.com/img/i/abt2.jpg"]
 }
-var module2Img={
-	head:["http://ad.wayboo.net.cn/common/img/i/head.jpg"],
-	middleImg:[
-		"http://ad.wayboo.net.cn/common/img/i/middle1.jpg",
-		"http://ad.wayboo.net.cn/common/img/i/middle2.jpg",
-		"http://ad.wayboo.net.cn/common/img/i/middle3.jpg",
-	],
-	foot:["http://ad.wayboo.net.cn/common/img/i/foot.jpg"]
-};
-var module2minImg=[
-		"http://ad.wayboo.net.cn/common/img/i/middle1.jpg",
-		"http://ad.wayboo.net.cn/common/img/i/middle2.jpg",
-		"http://ad.wayboo.net.cn/common/img/i/middle3.jpg"
-	];
 
-var module3Img={
+
+
+//产品报价模板
+{
 	h1:"螺杆式空压机静音7.5KW螺杆空压机厂家1.2立方螺杆空气压缩机批发",
 	txtName:[
 	{name:"螺杆式空压机 DHF-10A"},
@@ -99,8 +110,3 @@ var module3Img={
 		{img:"http://page-bucket.oss-cn-beijing.aliyuncs.com/land-page/images/img7.jpg",h1:"工厂实拍展示"}
 	]
 }
-
-
-
-
-export default{moduleImg1,module2Img,module2minImg,module3Img}

@@ -7,8 +7,8 @@
 						<p style="line-height: 35px;">通用模板</p>
 					</div>
 					<div class="col-md-6 text-right" style="padding-right: 30px;">
-						<a href="#/Choice">退出模板</a>
-						<a href="javascript:void(0)" onclick="javascript:location.reload();">重做</a>
+						<el-button plain><a href="#/Choice" style="color: #000000;">退出模板</a></el-button>
+						<el-button plain  onclick="javascript:location.reload();">重做</el-button>
 						<el-button type="primary" v-if="ImmediateUse" @click="ImmediateUseclick" >立即使用</el-button>
 						<el-button type="primary" v-if="Submit" v-bind:disabled="disabled"   @click="Submitclick">提交并发布</el-button>
 					</div>
@@ -25,29 +25,36 @@
 				</div>
 			</div>
 		</div>
-		<div class="pageWrapperP_box" id="operation_box" v-model="html">
-			<div class="operation_head" 
+		<div  class="pageWrapperP_box" id="operation_box" v-model="html">
+			<div class="operation_head" v-for="(item,index) in data.head"
 				v-loading="loading"  element-loading-text="拼命加载中"
 			    element-loading-spinner="el-icon-loading"
 			    element-loading-background="rgba(0, 0, 0, 0.8)">
-				<img v-bind:src="headImg" width="100%"/>
+				<a href="javascript:void(0)" onclick="clickGXinRong(this);" style="display: inline-block;" data-type="co" data-keyword="关键字" data-local="A">
+					<img v-bind:src="item" width="100%"/>
+				</a>
 				<div class="Mask"  v-if="allDelete">
 					<p>上传图片的宽为1920PX</p>
 					<p>
 						<el-button type="primary "round class="fileBox">
 						上传<i class="el-icon-upload el-icon--right"></i>
-						<input type="file" v-on:change="head($refs.module2Head,1920)" ref="module2Head" />
+						<input type="file" v-on:change="head($refs.module2Head[index],index,1920)" ref="module2Head" />
 					</el-button>
-					 <el-button type="danger" round icon="el-icon-delete" @click="delHead()">删除</el-button>
+					 <el-button type="danger" round icon="el-icon-delete" @click="delHead(index)">删除</el-button>
 					</p>
 				</div>
 			</div>
+			<p  v-if="allDelete" class="text-center">
+				<el-button type="success" size="mini" @click="addhead">添加一张</el-button>
+			</p>
 			<div>
 				<ul style="width: 1200px; margin: auto;">
-					<li class="Mask_box" v-for="(maskBox,index) in Mask_box" v-loading="loading"  element-loading-text="拼命加载中"
-			    element-loading-spinner="el-icon-loading"
-			    element-loading-background="rgba(0, 0, 0, 0.8)">
-						<img v-bind:src="maskBox" width="100%"/>
+					<li class="Mask_box" v-for="(maskBox,index) in data.middleImg" v-loading="loading"  element-loading-text="拼命加载中"
+				    element-loading-spinner="el-icon-loading"
+				    element-loading-background="rgba(0, 0, 0, 0.8)">
+						<a href="javascript:void(0)" onclick="clickGXinRong(this);" style="display: inline-block;" data-type="co" data-keyword="关键字" data-local="A">
+							<img v-bind:src="maskBox" width="100%"/>
+						</a>
 						<div class="Mask"  v-if="allDelete">
 							<p>上传图片的宽为1200PX</p>
 							<p>
@@ -60,27 +67,31 @@
 						</div>
 					</li>
 					<li class="addMask"  v-if="allDelete">
-						<el-button type="success" @click="addMask">添加一张</el-button>
+						<el-button type="success" size="mini" @click="addMask">添加一张</el-button>
 					</li>
 				</ul>
 				<div id="script" v-html="this.script" ></div>
 			</div>
-			<div class="operation_head" v-loading="loading"  element-loading-text="拼命加载中"
+			<div v-for="(item,index) in data.foot" class="operation_head" v-loading="loading"  element-loading-text="拼命加载中"
 			    element-loading-spinner="el-icon-loading"
 			    element-loading-background="rgba(0, 0, 0, 0.8)">
-				<img v-bind:src="footImg" width="100%"/>
+				<a href="javascript:void(0)"  onclick="clickGXinRong(this);" style="display: inline-block;" data-type="co" data-keyword="关键字" data-local="A">
+					<img v-bind:src="item" width="100%"/>
+				</a>
 				<div class="Mask" v-if="allDelete">
 					<p>上传图片的宽为1920PX</p>
 					<p>
 						<el-button type="primary "round class="fileBox">
 						上传<i class="el-icon-upload el-icon--right"></i>
-						<input type="file" v-on:change="foot($refs.module2Foot,1920)" ref="module2Foot" />
+						<input type="file" v-on:change="foot($refs.module2Foot[index],index,1920)" ref="module2Foot" />
 						</el-button>
-						<el-button type="danger" round icon="el-icon-delete" @click="delFoot()">删除</el-button>
+						<el-button type="danger" round icon="el-icon-delete" @click="delFoot(index)">删除</el-button>
 					</p>
 				</div>
-				
 			</div>
+			<p  v-if="allDelete" class="text-center">
+					<el-button type="success" size="mini" @click="addfooter">添加一张</el-button>
+			 </p>
 		</div>
 		<!--提示框-->
 		<el-dialog title="" :visible.sync="dialogFormVisible" width="35%" >
@@ -109,6 +120,7 @@
 		    <el-button type="primary" plain @click="Prompt" v-show='!waning'>使用该模板</el-button>
 			    <el-button type="primary" plain v-show='waning' @click="dialogFormVisible=false">审核</el-button>
 		  </div>
+		  
 		</el-dialog>
 		<el-dialog :visible.sync="dialogVisible"  width="30%">
 		  <div class="text-center" v-html="Release"></div>
@@ -121,6 +133,7 @@
 </template>
 
 <script>
+  import global_ from '@/assets/json.js'
   export default {
     data() {
       return {
@@ -134,17 +147,15 @@
       	  Submit:false,
       	  allDelete:true,
       	  script:'',
+      	  data:global_.module2Img,
       	  dialogFormVisible:true,
       	  dialogVisible:false,
-      	  Release:'<p style="font-size: 20px;color: rgba(30,125,253);font-weight: bold;">发布成功</p><p>请在首页<a href="#/home" style="font-style: normal;color: rgba(30,125,253);">[着陆页网址]</a>中查看网址~</p>',
+      	  Release:'<p style="font-size: 20px;color: rgba(30,125,253);font-weight: bold;">发布成功</p><p>请在首页<a href="#/details" style="font-style: normal;color: rgba(30,125,253);">[维护]</a>中查看网址~</p>',
       	  classRed:false,
       	  waning:false,
       	  againLading:false,
       	  disabled:false,
       	  html:$("#operation_box").html(),
-      	  headImg:"http://ad.wayboo.net.cn/common/img/i/head.jpg",
-      	  Mask_box:["http://ad.wayboo.net.cn/common/img/i/middle1.jpg","http://ad.wayboo.net.cn/common/img/i/middle2.jpg","http://ad.wayboo.net.cn/common/img/i/middle3.jpg"],
-      	  footImg:"http://ad.wayboo.net.cn/common/img/i/foot.jpg"
       };
     },
      watch: {  
@@ -154,13 +165,41 @@
 		}, 
     mounted(){
     	/***/
+    	
+//  	console.log(localStorage.getItem("pageId"))
     	if($("body").attr("class")=="fix-header show-sidebar hide-sidebar"){
     		$(".pageWrapper_top").removeClass("pageWrapper_topR")
     	}else{$(".pageWrapper_top").addClass("pageWrapper_topR")}
     	/***/
     	this.indexData=JSON.parse(localStorage.getItem("data"))
     	this.pageId=localStorage.getItem("pageId")
-//  	console.log(this.indexData)
+    	var _this=this;
+		var moduleId=1
+		var modulePageId=null
+		if(this.$route.params.pageId==undefined){
+		}else{
+			moduleId=this.$route.params.moduleDdata.id;
+			modulePageId=this.$route.params.pageId;
+		}
+		$.ajax({
+    		contentType :"application/json;charset=UTF-8",
+			type:"get",
+			dataType: 'json',
+    		url:_this.apiUrl.apiUrl+"/page/findPageEditParams",
+    		async:true,
+    		data:{
+    			"pageId":modulePageId,
+    			"modelId":moduleId,
+    		},
+    		success:function(str){
+    			console.log(str.data.paramPC.head)
+    			_this.data=str.data.paramPC
+    		},
+    		error:function(err){
+    			console.log("err")
+    		}
+    	});
+//  	console.log(this.data)
     },
     methods: {
     	open(txt,h1) {
@@ -173,10 +212,10 @@
       		//$("#numberInput").html(this.description.length)
       	},
       	Return(){
-      		localStorage.clear()
+//    		localStorage.clear()
   		  	 this.$router.push({
-	            path: 'home', 
-	            name: 'home',
+	            path: 'details', 
+	            name: 'details',
 	        })
       	},
       	/**获取生意帮代码*/
@@ -209,9 +248,6 @@
       	/**提交*/
       	Submitclick(){
       		var _this=this
-      		if(this.pageId=='undefined'){
-      			this.pageId=null;
-      		}
 //    		console.log("pageId***"+this.pageId)
       		this.disabled=true;
       		$.ajax({
@@ -225,15 +261,14 @@
                     "modelType":0,/*模板类型**/
                     "clientName": _this.indexData.CustomerName,/*客户名称**/
                     "htmlCode": $("#operation_box").html(),/*html代码**/
+                    "editParam":JSON.stringify(_this.data),
                     "modelId": 1,/*模板id**/
                     "orderId":_this.indexData.network_id,/*流量卡ID**/
                     "description":_this.description,
 				    "pageId":_this.pageId,
 				}),
 				success:function(res){
-//					console.log(res)
 					_this.allDelete=false;
-//					console.log($("#operation_box").html())
 					if(res.status==500){
 						alert("着陆页数量不能大于5个")
 						_this.$router.push({
@@ -261,27 +296,33 @@
       		}
       		
       	},
-    	head(input_file,maxWidth){
+    	head(input_file,index,maxWidth){
     		var _this=this;
     		this.loading=true;
     		this.dataImg(_this,input_file,maxWidth,
 	    		function(str){
-	    		_this.headImg=str
+	    		_this.data.head.splice(index,1,str)
 	    	})
     	},
-    	delHead(){
-    		this.headImg=null
+    	delHead(index){
+    		this.data.head.splice(index,1)
     	},
-    	delFoot(){
-    		this.footImg=null
+    	addhead(){
+    		this.data.head.push("http://ad.wayboo.net.cn/common/img/i/head.jpg")
     	},
-    	foot(input_file,maxWidth){
+    	delFoot(index){
+    		this.data.foot.splice(index,1)
+    	},
+    	addfooter(){
+    		this.data.foot.push("http://ad.wayboo.net.cn/common/img/i/foot.jpg")
+    	},
+    	foot(input_file,index,maxWidth){
     		var _this=this;
     		this.loading=true;
     		this.loading=true;
     		this.dataImg(_this,input_file,maxWidth,
 	    		function(str){
-	    		_this.footImg=str
+	    		_this.data.foot.splice(index,1,str)
 	    	})
     	},
     	maskFile(input_file,index,maxWidth){
@@ -290,15 +331,15 @@
     		this.loading=true;
     		this.dataImg(_this,input_file,maxWidth,
 	    		function(str){
-	    		_this.Mask_box.splice(index,1,str)
+	    		_this.data.middleImg.splice(index,1,str)
 	    	})
     	},
     	addMask(){
-    		this.Mask_box.push("http://ad.wayboo.net.cn/common/img/i/middle1.jpg")
+    		this.data.middleImg.push("http://ad.wayboo.net.cn/common/img/i/middle1.jpg")
     	},
     	delMask(index){
 //  		console.log(index)
-    		this.Mask_box.splice(index,1)
+    		this.data.middleImg.splice(index,1)
     	},
     	/*上传图片**/
 		dataImg(_this,input_file,maxWidth, get_data){
@@ -314,6 +355,7 @@
 		             formData.append("file",file);
                      if(parseInt(file.size/1024/1024)>1){
                     	alert("图片不能大于1M")
+                    	_this.loading=false
                     	return false;  
                     }
                     if (!/image\/\w+/.test(file.type)) {  
@@ -340,8 +382,8 @@
 		                    			get_data(str.data); 
 									},
 									error:function(){
-										 _this.Release='<p style="font-size: 20px;color: rgba(30,125,253);font-weight: bold;">网络异常</p><p>也许他想静静~</p>'
-										 _this.againLading=true;
+										_this.Release='<p style="font-size: 20px;color: rgba(30,125,253);font-weight: bold;">网络异常</p><p>也许他想静静~</p>'
+										_this.againLading=true;
                     					_this.loading=false
 									}
 			                	});

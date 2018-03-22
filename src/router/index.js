@@ -2,11 +2,15 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import home from '@/components/home'
 import Choice from '@/components/Choice'
-import preview1 from '@/components/preview1'
-import preview2 from '@/components/preview2'
 import details from '@/components/details'
+/*预览**/
+import preview1 from '@/components/allPreview/preview1'
+import preview2 from '@/components/allPreview/preview2'
+import preview3 from '@/components/allPreview/preview3'
+/*模板*/
 import operation1 from '@/components/Template/model1/operation'
 import operation2 from '@/components/Template/model2/operation'
+import operation3 from '@/components/Template/model3/operation'
 import operation2Middle from '@/components/Template/model1/operationMiddle'
 Vue.use(Router)
 
@@ -15,19 +19,6 @@ export default new Router({
    {
       path: '/',
       name: 'home',
-      params: { 
-                name: 'name', 
-                dataObj: 1
-            },
-      component: home
-    },
-    {
-      path: '/home',
-      name: 'home',
-       params: { 
-                name: 'name', 
-                dataObj: 1
-            },
       component: home
     },
     {
@@ -46,6 +37,11 @@ export default new Router({
       component: preview2
     },
     {
+      path: '/preview3',
+      name: 'preview3',
+      component: preview3
+    },
+    {
       path: '/operation1',
       name: 'operation1',
       component: operation1
@@ -54,6 +50,11 @@ export default new Router({
       path: '/operation2',
       name: 'operation2',
       component: operation2
+    },
+    {
+      path: '/operation3',
+      name: 'operation3',
+      component: operation3
     },
     {
       path: '/operation2Middle',

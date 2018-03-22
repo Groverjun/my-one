@@ -57,8 +57,8 @@
 									    <el-date-picker
 									      v-model="selectionTime"
 									      type="date"
-									      format="yyyy 年 MM 月 dd 日"
-									      placeholder="选择日期" style="display: block;width: 100%;">
+									      value-format="yyyy-MM-dd"
+									      placeholder="选择日期" style="display: block;width: 100%;"  @change="getSTime" format="yyyy-MM-dd" >
 									    </el-date-picker>
 									  </div>
 							    </div>
@@ -213,7 +213,7 @@ export default {
       cities:[
       	{id:"1",source:360}
       ],
-    	arr2T:[],
+    	arr2T:[1,0,0,0,0,0,1,1],
     	dialogFormVisible:false,
     	formLabelWidth: '120px',
     	/**时间选择框*/
@@ -274,17 +274,32 @@ export default {
       	channel_id:null,
       	pages:1,
       	indexService:null,
+      	sybId:null,
+      	allquery:null,
     }
   },
   mounted(){
-  	$("#show").hide()
-  	/*获取登录数据**/
-			this.$xhr.get("/login/channelInfo").then((res)=>{
-//				console.log(res)
+  			$("#show").hide()
+  			localStorage.clear()
+//			console.log(localStorage.getItem("data"))
+//			console.log(localStorage.getItem("username"))
+//			console.log(localStorage.getItem("pageId"))
+// 				console.log(this.$route.params.allquery)
+ 				if(this.$route.params.allquery==undefined){
+// 					console.log(0)
+ 				}else{
+ 					this.CustomerName=this.$route.params.allquery.CustomerName
+			  	this.contactTel=this.$route.params.allquery.contactTel
+			  	this.state=this.$route.params.allquery.state
+			  	this.selectionTime=this.$route.params.allquery.selectionTime
+ 				}
+
+  	  	this.$xhr.get("/login/channelInfo").then((res)=>{
 				this.UserName=res.data.sub_company;
 				this.channel_id=res.data.channel_id;
-				this.ajaxData(this.pages,this.CustomerName,this.contactTel,this.state,this.selectionTime,this.channel_id,this)
+				this.ajaxData(this.pages,this.CustomerName,this.contactTel,this.state,this.selectionTime,this.channel_id,this)   
 			})
+  	  
 			/*获取投放域名**/
 			this.$xhr.get("/page/findDomainNames").then((res)=>{
 				for(var i in res.data){
@@ -300,8 +315,7 @@ export default {
   	Determine(){
   		/*在线客服列表console.log(this.arr2T)**/
   		var _this=this
-  		/**console.log(_this.tbodyData2[_this.indexService])*/
-  		var syb_extend=_this.arr2T.join(",")
+  		var syb_extend=_this.arr2T.join(",");
 			$.ajax({
 					type:"post",
 					contentType : "application/json;charset=UTF-8",
@@ -313,9 +327,10 @@ export default {
 					  "domainIds":_this.checkedCities1 ,
 					  "syb_extend":_this.sybExtend,
 					  "syb_ifShow":syb_extend,
-					  "syb_position":_this.sybPosition,
+					  "syb_position":_this.Position,
 					  "syb_productType": _this.productType,
-					  "syb_styleNum": _this.styleRadio
+					  "syb_styleNum": _this.styleRadio,
+					  "syb_id":this.sybId
 					}),
 					success:function(str){
 						_this.dialogFormVisible = false
@@ -337,6 +352,8 @@ export default {
 					  "network_id":_this.tbodyData2[index].network_id,
 					}),
 					success:function(res){
+//						console.log(res)
+						_this.sybId=res.data.codeEntity.id
 						_this.Position=res.data.codeEntity.sybPosition;
 						_this.productType=res.data.codeEntity.sybProducttype;
 						_this.styleRadio=res.data.codeEntity.sybStylenum
@@ -358,7 +375,8 @@ export default {
   	},
   	/*在线客服列表选项**/
   	handleCheckedCitiesChange(){
-  		var checkA=this.checkedCities
+  		this.arr2T=[1,0,0,0,0,0,1,1]
+  		var checkA=this.checkedCities;
   		for (var i in checkA) {
 	  			if(checkA[i]=='1'){/*咨询**/
 	  				this.arr2T[1]='1'
@@ -369,38 +387,56 @@ export default {
 					}else if(checkA[i]=='5'){/*电话**/
 						this.arr2T[5]='1'
 					}
+				
   		}
     },
   	/**查询*/
   	query(){
-//		console.log(this.contactTel)
+  		this.allquery={
+  			CustomerName:this.CustomerName,
+  			contactTel:this.contactTel,
+  			state:this.state,
+  			selectionTime:this.selectionTime,
+  		}
 			this.ajaxData(1,this.CustomerName,this.contactTel,this.state,this.selectionTime,this.channel_id,this)
-//			console.log(this.tbodyData)
   	},
   	/*制作着陆页按钮*/
   	sendParams(index){
-  	localStorage.setItem("data",JSON.stringify(this.tbodyData2[index]))
+  	localStorage.clear("pageId")
+		localStorage.setItem("data",JSON.stringify(this.tbodyData2[index]))
+		localStorage.setItem("username",this.UserName)
   	 this.$router.push({
             path: 'Choice', 
             name: 'Choice',
             params:{
-            	customerName:this.tbodyData2[index],
             	UserName:this.UserName
             }
         })
   	},
   	/*制作详情页按钮*/
   	details(index){
-  		localStorage.setItem("data",JSON.stringify(this.tbodyData2[index]))
-  		  	 this.$router.push({
+			localStorage.clear("pageId")
+			
+			localStorage.setItem("data",JSON.stringify(this.tbodyData2[index]))
+			localStorage.setItem("username",this.UserName)
+	  		this.allquery={
+	  			CustomerName:this.CustomerName,
+	  			contactTel:this.contactTel,
+	  			state:this.state,
+	  			selectionTime:this.selectionTime,
+	  		}
+		  	 this.$router.push({
             path: 'details', 
             name: 'details',
             params:{
-            	customerName:this.tbodyData2[index],
-            	UserName:this.UserName
+            	UserName:this.UserName,
+            	allquery:this.allquery,
             }
         })
   	},
+  	getSTime(val) {
+         this.selectionTime=val;
+    },
   	/*分页**/
   	pagination(currentPage){
   		var pages=currentPage
@@ -458,5 +494,3 @@ export default {
   }
 }
 </script>
-
-

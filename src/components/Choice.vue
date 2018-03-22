@@ -52,6 +52,7 @@
 										<p class="text-center">
 											<span v-if="index==0">通用模板</span>
 											<span v-if="index==1">自定义模板</span>
+											<span v-if="index==2">产品报价模板</span>
 										</p>
 										<div>
 												<p class="module_imgBox text-center"><img v-bind:src="Img.displayImgPc" width="100%"/></p>
@@ -80,28 +81,30 @@ export default {
   },
   mounted(){
   	$("#show").show()
-//  console.log(this.$route.params)
-    this.UserName=this.$route.params.UserName;
-    this.indexData=this.$route.params.customerName;
-//  console.log(this.indexData)
+    this.UserName=localStorage.getItem("username")
+    if(this.UserName==undefined){
+    	this.$router.push({
+            path: 'home', 
+            name: 'home',
+        })
+    }
     this.$xhr.get("/page/findModel").then((res)=>{
 				this.Img=res.data
 				this.loading=false
-//				console.log(this.Img)
+//				console.log(res.data)
 		})
   },
   methods:{
   	preview(index){
 	  	  this.$router.push({
 		        path: 'preview'+(index+1), 
-		        name: 'preview'+(index+1),
+		        name: 'preview'+(index+1)
 	      })
   	},
   	primary(index){
   		this.$router.push({
 		        path: 'operation'+(index+1), 
-		        name: 'operation'+(index+1),
-		        params:this.indexData,
+		        name: 'operation'+(index+1)
 	      })
   	}
   }

@@ -7,8 +7,8 @@
 						<p style="line-height: 35px;">通用模板</p>
 					</div>
 					<div class="col-md-6 text-right" style="padding-right: 30px;">
-						<a href="#/Choice">退出模板</a>
-						<a href="javascript:void(0)" onclick="javascript:location.reload();">重做</a>
+						<el-button plain><a href="#/Choice" style="color: #000000;">退出模板</a></el-button>
+						<el-button plain  onclick="javascript:location.reload();">重做</el-button>
 						<el-button type="primary" v-if="ImmediateUse" @click="ImmediateUseclick">立即使用</el-button>
 						<el-button type="primary" v-if="Submit"  v-bind:disabled="disabled"  @click="Submitclick">提交并发布</el-button>
 					</div>
@@ -28,7 +28,7 @@
 		<div class="pageWrapperP_box">
 			<div id="operation_box" v-model="html">
 				<ul style="width: 768px; margin: auto;">
-					<li class="Mask_box" v-for="(maskBox,index) in Mask_box" v-loading="loading"  element-loading-text="拼命加载中"
+					<li class="Mask_box" v-for="(maskBox,index) in data" v-loading="loading"  element-loading-text="拼命加载中"
 			    element-loading-spinner="el-icon-loading"
 			    element-loading-background="rgba(0, 0, 0, 0.8)">
 						<img v-bind:src="maskBox" width="100%"/>
@@ -92,6 +92,7 @@
 </template>
 
 <script>
+  import global_ from '@/assets/json.js'
   export default {
     data() {
       return {
@@ -106,17 +107,15 @@
       	  allDelete:true,
       	  dialogVisible:false,
       	  script:'',
+      	  data:global_.module2minImg,
       	  dialogFormVisible:true,
       	  hintText:false,
-      	  Release:'<p style="font-size: 20px;color: rgba(30,125,253);font-weight: bold;">发布成功</p><p>请在首页<a href="#/home" style="font-style: normal;color: rgba(30,125,253);">[着陆页网址]</a>中查看网址~</p>',
+      	  Release:'<p style="font-size: 20px;color: rgba(30,125,253);font-weight: bold;">发布成功</p><p>请在首页<a href="#/details" style="font-style: normal;color: rgba(30,125,253);">[维护]</a>中查看网址~</p>',
       	  classRed:false,
       	  waning:false,
       	  againLading:false,
       	  disabled:false,
       	  html:$("#operation_box").html(),
-      	  headImg:"http://ad.wayboo.net.cn/common/img/i/head.jpg",
-      	  Mask_box:["http://ad.wayboo.net.cn/common/img/i/middle1.jpg","http://ad.wayboo.net.cn/common/img/i/middle2.jpg","http://ad.wayboo.net.cn/common/img/i/middle3.jpg"],
-      	  footImg:"http://ad.wayboo.net.cn/common/img/i/foot.jpg"
       };
     },
      watch: {  
@@ -133,6 +132,32 @@
     	this.indexData=JSON.parse(localStorage.getItem("data"))
     	this.pageId=localStorage.getItem("pageId")
 //  	console.log(this.indexData)
+    	var _this=this;
+		var moduleId=1
+		var modulePageId=null
+		if(this.$route.params.pageId==undefined){
+		}else{
+			moduleId=this.$route.params.moduleDdata.id;
+			modulePageId=this.$route.params.pageId;
+		}
+		$.ajax({
+    		contentType :"application/json;charset=UTF-8",
+			type:"get",
+			dataType: 'json',
+    		url:_this.apiUrl.apiUrl+"/page/findPageEditParams",
+    		async:true,
+    		data:{
+    			"pageId":modulePageId,
+    			"modelId":moduleId,
+    		},
+    		success:function(str){
+//  			console.log(str.data.paramMob.img)
+    			_this.data=str.data.paramMob.img
+    		},
+    		error:function(err){
+    			console.log("err")
+    		}
+    	});
     },
     methods: {
     	open(txt,h1) {
@@ -141,10 +166,10 @@
 	        });
       	},
       	Return(){
-      		localStorage.clear()
+//    		localStorage.clear()
   		  	 this.$router.push({
-	            path: 'home', 
-	            name: 'home',
+	            path: 'details', 
+	            name: 'details',
 	        })
       	},
       	/**获取生意帮代码*/
@@ -175,11 +200,7 @@
       	},
       	/**提交*/
       	Submitclick(){
-      		if(this.pageId=='undefined'){
-      			this.pageId=null;
-      		}
       		this.disabled=true;
-//    		console.log(this.pageId)
       		var _this=this
       		this.allDelete=false
       		$.ajax({
@@ -193,13 +214,13 @@
                     "modelType":1,/*模板类型**/
                     "clientName": _this.indexData.CustomerName,/*客户名称**/
                     "htmlCode":$("#operation_box").html(),/*html代码**/
-                    "modelId": 2,/*模板id**/
+                    "editParam":JSON.stringify(_this.data),
+                    "modelId": 1,/*模板id**/
                     "orderId":_this.indexData.network_id,/*流量卡ID**/
                     "description":_this.description,
 				    "pageId":_this.pageId,
 				}),
 				success:function(res){
-//					console.log(res)
 					if(res.status==500){
 						alert("着陆页数量不能大于5个")
 						_this.$router.push({
@@ -232,15 +253,15 @@
     		this.loading=true;
     		this.dataImg(_this,input_file,maxWidth,
 	    		function(str){
-	    		_this.Mask_box.splice(index,1,str)
+	    		_this.data.splice(index,1,str)
 	    	})
     	},
     	addMask(){
-    		this.Mask_box.push("http://ad.wayboo.net.cn/common/img/i/middle1.jpg")
+    		this.data.push("http://ad.wayboo.net.cn/common/img/i/middle1.jpg")
     	},
     	delMask(index){
 //  		console.log(index)
-    		this.Mask_box.splice(index,1)
+    		this.data.splice(index,1)
     	},
     	/*上传图片**/
 		dataImg(_this,input_file,maxWidth, get_data){
@@ -256,6 +277,7 @@
 		             formData.append("file",file);
                      if(parseInt(file.size/1024/1024)>1){
                     	alert("图片不能大于1M")
+                    	_this.loading=false
                     	return false;  
                     }
                     if (!/image\/\w+/.test(file.type)) {  

@@ -7,8 +7,8 @@
 						<p style="line-height: 35px;">自定义模板</p>
 					</div>
 					<div class="col-md-6 text-right" style="padding-right: 30px;">
-						<a href="#/Choice">退出模板</a>
-						<a href="javascript:void(0)" onclick="javascript:location.reload();">重做</a>
+						<el-button plain><a href="#/Choice" style="color: #000000;">退出模板</a></el-button>
+						<el-button plain  onclick="javascript:location.reload();">重做</el-button>
 						<el-button type="primary" v-if="ImmediateUse" @click="ImmediateUseclick">立即使用</el-button>
 						<el-button type="primary" v-if="Submit" @click="Submitclick" v-bind:disabled="disabled">提交并发布</el-button>
 					</div>
@@ -18,16 +18,25 @@
 		<!--内容区-->
 		<div id="pageWrapper_box">
 			<!--<swiper :IFdata="IFdata"></swiper>-->
-			<div class="banner Mask_box"  v-loading="logingT"  element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
-				<img v-bind:src="banner" width="100%"/>
+			<div v-for="(item,index) in data.banner" class="banner Mask_box"  v-loading="logingT"  element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+				<a href="javascript:void(0)"  onclick="clickGXinRong(this);" style="display: inline-block;" data-type="co" data-keyword="关键字" data-local="A">
+					<img v-bind:src="item" width="100%"/>
+				</a>
 				<div class="mask" v-if="IFdata">
 					<p style="color: #fff;">上传图片的宽为1920PX</p>
 					<p>
 						<el-button type="primary "round class="fileBox">
 						上传<i class="el-icon-upload el-icon--right"></i>
-						<input type="file" @change="bannerFile($refs.bannerImg,1920)" ref="bannerImg"/>
+						<input type="file" @change="bannerFile($refs.bannerImg[index],index,1920)" ref="bannerImg"/>
 						</el-button>
-						<el-button type="danger" round icon="el-icon-delete" @click="bannerDel()">删除</el-button>
+						<el-button type="danger" round icon="el-icon-delete" @click="bannerDel(index)">删除</el-button>
+					</p>
+				</div>
+			</div>
+			<div class="row" v-if="IFdata" style="padding: 10px 0;">
+				<div class="col-lg-12">
+					<p  class="text-center">
+						<el-button type="success" size="mini" @click="addbanner">添加一张</el-button>
 					</p>
 				</div>
 			</div>
@@ -45,7 +54,9 @@
 						<div class="col-lg-4 col-lg-6 col-lg-12" v-for="(item,index) in data.product">
 							<ul  v-loading="logingT"  element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
 								<li class="Mask_box">
-									<img v-bind:src="item.img" width="100%"/>
+									<a href="javascript:void(0)"  onclick="clickGXinRong(this);" style="display: inline-block;" data-type="co" data-keyword="关键字" data-local="A">
+										<img v-bind:src="item.img" width="100%"/>
+									</a>
 									<div class="mask" v-if="IFdata">
 										<p style="color: #fff;">上传图片的宽为370PX</p>
 										<p>
@@ -73,16 +84,25 @@
 					</div>
 				</div>
 				<!---->
-				<div class="abt1 Mask_box"  v-loading="logingT"  element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
-					<img v-bind:src="data.iso" width="100%"/>
+				<div v-for="(item,index) in data.iso" class="abt1 Mask_box"  v-loading="logingT"  element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+					<a href="javascript:void(0)"  onclick="clickGXinRong(this);" style="display: inline-block;" data-type="co" data-keyword="关键字" data-local="A">
+						<img v-bind:src="item" width="100%"/>
+					</a>
 					<div class="mask" v-if="IFdata">
 						<p style="color: #fff;">上传图片的宽为1920PX</p>
 						<p>
 							<el-button type="primary "round class="fileBox">
 							上传<i class="el-icon-upload el-icon--right"></i>
-							<input type="file" @change="isoFile($refs.isoImg,1920)" ref="isoImg"/>
+							<input type="file" @change="isoFile($refs.isoImg[index],index,1920)" ref="isoImg"/>
 							</el-button>
-							<el-button type="danger" round icon="el-icon-delete" @click="isoDel">删除</el-button>
+							<el-button type="danger" round icon="el-icon-delete" @click="isoDel(index)">删除</el-button>
+						</p>
+					</div>
+				</div>
+				<div class="row" v-if="IFdata" style="padding: 10px 0;">
+					<div class="col-lg-12">
+						<p  class="text-center">
+							<el-button type="success" size="mini" @click="addabt1">添加一张</el-button>
 						</p>
 					</div>
 				</div>
@@ -149,16 +169,25 @@
 				</div>
 				<!---->
 				<!--abt2-->
-				<div class="abt1 Mask_box"  v-loading="logingT"  element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
-					<img v-bind:src="data.steel" width="100%"/>
+				<div v-for="(item,index) in data.steel" class="abt1 Mask_box"  v-loading="logingT"  element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+					<a href="javascript:void(0)"  onclick="clickGXinRong(this);" style="display: inline-block;" data-type="co" data-keyword="关键字" data-local="A">
+						<img v-bind:src="item" width="100%"/>
+					</a>
 					<div class="mask" v-if="IFdata">
 						<p style="color: #fff;">上传图片的宽为1920PX</p>
 						<p>
 							<el-button type="primary "round class="fileBox">
 							上传<i class="el-icon-upload el-icon--right"></i>
-							<input type="file" @change="steelFile($refs.steelImg,1920)" ref="steelImg"/>
+							<input type="file" @change="steelFile($refs.steelImg[index],index,1920)" ref="steelImg"/>
 							</el-button>
-							<el-button type="danger" round icon="el-icon-delete" @click="steeloDel">删除</el-button>
+							<el-button type="danger" round icon="el-icon-delete" @click="steeloDel(index)">删除</el-button>
+						</p>
+					</div>
+				</div>
+				<div class="row" v-if="IFdata" style="padding: 10px 0;">
+					<div class="col-lg-12">
+						<p  class="text-center">
+							<el-button type="success" size="mini" @click="addabt2">添加一张</el-button>
 						</p>
 					</div>
 				</div>
@@ -173,7 +202,6 @@
 								</div>
 							</div>
 						</div>
-						
 						<div class="row">
 							<div class="col-lg-4 col-lg-12" v-for="(item,index) in data.successfulCases">
 								<ul  v-loading="logingT"  element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
@@ -245,7 +273,9 @@
 						<div class="row">
 							<div class="col-lg-12 ">
 								<div class="foot_abt text-center">
-									<button class="btn btn-danger">立即咨询</button>
+									<a href="javascript:void(0)"  onclick="clickGXinRong(this);" style="display: inline-block;" data-type="co" data-keyword="关键字" data-local="A" class="btn btn-danger">
+										立即咨询
+									</a>
 								</div>
 							</div>
 						</div>
@@ -293,7 +323,6 @@
 </template>
 
 <script>
-//import swiper from '../../swiper'
   import global_ from '@/assets/json.js'
   export default {
  	watch: {  
@@ -307,14 +336,14 @@
       	pageId:null,/*详情页传的ID**/
       	description:null,/*模板名称**/
       	descriptionNumber:0,
-      	data:global_.data,
+      	data:global_.moduleImg1,
       	IFdata:true,/*删除多余代码*/
       	IFdataShow:true,
       	IFdataHide:false,
       	ImmediateUse:true,
       	Submit:false,
-      	banner:'http://ad.wayboo.net.cn/common/img/i/banner.jpg',
-      	Release:'<p style="font-size: 20px;color: rgba(30,125,253);font-weight: bold;">发布成功</p><p>请在首页<a href="#/home" style="font-style: normal;color: rgba(30,125,253);">[着陆页网址]</a>中查看网址~</p>',
+      	banner:'http://page-bucket.oiaqye7985.com/img/i/banner.jpg',
+      	Release:'<p style="font-size: 20px;color: rgba(30,125,253);font-weight: bold;">发布成功</p><p>请在首页<a href="#/details" style="font-style: normal;color: rgba(30,125,253);">[维护]</a>中查看网址~</p>',
   	    classRed:false,
   	    waning:false,
   	    againLading:false,
@@ -327,6 +356,8 @@
       };
     },
     mounted(){
+//  	console.log(this.data.banner)
+//  	console.log(localStorage.getItem("pageId"))
     	/***/
     	if($("body").attr("class")=="fix-header show-sidebar hide-sidebar"){
     		$(".pageWrapper_top").removeClass("pageWrapper_topR")
@@ -334,7 +365,33 @@
     	/***/
     	this.indexData=JSON.parse(localStorage.getItem("data"))
     	this.pageId=localStorage.getItem("pageId")
-//  	console.log(this.indexData)
+    	var _this=this;
+		var moduleId=2
+		var modulePageId=null
+		if(this.$route.params.pageId==undefined){
+		}else{
+			moduleId=this.$route.params.moduleDdata.id;
+			modulePageId=this.$route.params.pageId;
+		}
+		$.ajax({
+    		contentType :"application/json;charset=UTF-8",
+			type:"get",
+			dataType: 'json',
+    		url:_this.apiUrl.apiUrl+"/page/findPageEditParams",
+    		async:true,
+    		data:{
+    			"pageId":modulePageId,
+    			"modelId":moduleId,
+    		},
+    		success:function(str){
+//  			console.log(str.data.paramPC)
+    			_this.data=str.data.paramPC
+    		},
+    		error:function(err){
+    			console.log("err")
+    		}
+    	});
+		console.log(this.data)
     },
     methods: {
     	ImmediateUseclick(){
@@ -367,10 +424,6 @@
     	Submitclick(){
     		var _this=this
     		this.html=$("#pageWrapper_box").html()
-//  		console.log(this.html);
-    		if(this.pageId=='undefined'){
-      			this.pageId=null;
-      		}
     		this.disabled=true
       		$.ajax({
       			type:"post",
@@ -383,18 +436,18 @@
                     "modelType":0,/*模板类型**/
                     "clientName": _this.indexData.CustomerName,/*客户名称**/
                     "htmlCode": _this.html,/*html代码**/
+                   	"editParam":JSON.stringify(_this.data),
                     "modelId": 2,/*模板id**/
                     "orderId":_this.indexData.network_id,/*流量卡ID**/
                     "description":_this.description,
 				    "pageId":_this.pageId,
 				}),
 				success:function(res){
-//					console.log(res)
 					if(res.status==500){
 						alert("着陆页数量不能大于5个")
 						_this.$router.push({
-				            path: 'home', 
-				            name: 'home',
+				            path: 'details', 
+	           				 name: 'details',
 				        })
 					}else{
 						_this.dialogVisible=true
@@ -421,22 +474,24 @@
           confirmButtonText: '确定',
         });
       	},
-      	bannerFile(input_file,maxWidth){
+      	bannerFile(input_file,index,maxWidth){
       		var _this=this;
     		this.dataImg(_this,input_file,maxWidth,
 		    	function(str){
-		    		_this.banner=str
-//		    		console.log(str)
+		    		_this.data.banner.splice(index,1,str)
+		    		console.log(_this.data)
 		    })
       },
-      	bannerDel(){
-      		this.banner=null;
-      	},
+      bannerDel(index){
+      		this.data.banner.splice(index,1)
+      },
+      addbanner(){
+      	this.data.banner.push("http://page-bucket.oiaqye7985.com/img/i/banner.jpg")
+      },
       	Return(){
-      		localStorage.clear()
   		  	 this.$router.push({
-	            path: 'home', 
-	            name: 'home',
+	            path: 'details', 
+	            name: 'details',
 	        })
       	},
       	edit(){
@@ -467,21 +522,25 @@
 			this.data.product.splice(index,1)
 		},
 		productAdd(){
-			this.data.product.push({img:"http://ad.wayboo.net.cn/common/img/i/b1_list1.jpg",p:"镀锌带方管"})
+			this.data.product.push({img:"http://page-bucket.oiaqye7985.com/img/i/b1_list1.jpg",p:"镀锌带方管"})
 		},
 		
 		/***/
 		
-		isoFile(input_file,maxWidth){
+		isoFile(input_file,index,maxWidth){
 			var _this=this;
     		this.dataImg(_this,input_file,maxWidth,
 		    	function(str){
-		    		_this.data.iso=str
-//		    		console.log(str)
+		    		console.log(str)
+		    		_this.data.iso.splice(index,1,str)
+//		    		console.log(_this.data)
 		    })
 		},
 		isoDel(index){
-			this.data.iso=null;
+			this.data.iso.splice(index,1)
+		},
+		addabt1(){
+			this.data.iso.push("http://page-bucket.oiaqye7985.com/img/i/abt1.jpg")
 		},
 		/****/
 		advantageFile(input_file,index,maxWidth){
@@ -499,23 +558,24 @@
 			this.data.advantage.push(
 				{h1:"强大的生产实力",p:"库存充足、保证货期",li:["热镀锌带圆管、方管是主导产品，年产量达45万吨;",
 				"直缝焊管、热镀锌管、螺旋焊管等产品年销量达65万吨;",	"产品广泛应用于水暖、大棚、穿线、石油、天然气等;", ],
-				img:"http://ad.wayboo.net.cn/common/img/i/b2_list1.jpg",},
+				img:"http://page-bucket.oiaqye7985.com/img/i/b2_list1.jpg",},
 			)
 		},
 		/****/
-		steelFile(input_file,maxWidth){
+		steelFile(input_file,index,maxWidth){
 			var _this=this;
     		this.dataImg(_this,input_file,maxWidth,
 		    	function(str){
-		    		_this.data.steel=str
+		    		_this.data.steel.splice(index,1,str)
 //		    		console.log(str)
 		    })
 		},
-		steeloDel(){
-			this.data.steel=null;
+		steeloDel(index){
+			this.data.steel.splice(index,1)
 		},
-		
-		 
+		addabt2(){
+			this.data.steel.push("http://page-bucket.oiaqye7985.com/img/i/abt2.jpg")
+		},
 		 /***/
 		fulCasesFile(input_file,index,maxWidth){
 			var _this=this;
@@ -529,7 +589,7 @@
 			this.data.successfulCases.splice(index,1)
 		},
 		fulCasesAdd(){
-			this.data.successfulCases.push({img:"http://ad.wayboo.net.cn/common/img/i/b3_list1.jpg",p:"大棚施工图"},)
+			this.data.successfulCases.push({img:"http://page-bucket.oiaqye7985.com/img/i/b3_list1.jpg",p:"大棚施工图"},)
 		},
 		footFile(input_file,index,maxWidth){
 			var _this=this;
@@ -565,6 +625,7 @@
 		             formData.append("file",file);
                      if(parseInt(file.size/1024/1024)>1){
                     	alert("图片不能大于1M")
+                    	_this.logingT=false
                     	return false;  
                     }
                     if (!/image\/\w+/.test(file.type)) {  
@@ -577,7 +638,6 @@
                     	image.onload=function(){
                     		if(maxWidth<=(image.width+10)&&maxWidth>=(image.width-10)){
                     			/**发送Ajax请求*/
-                    			
                     			$.ajax({
 			                		type:"post",
 			                		url:_this.apiUrl.apiUrl+"/file/saveImage",
@@ -663,7 +723,7 @@ text-align: center;
 }
 .title_Top {
   text-align: center;
-  background: url(http://ad.wayboo.net.cn/common/img/i/title_top.jpg) no-repeat;
+  background: url(http://page-bucket.oiaqye7985.com/img/i/title_top.jpg) no-repeat;
   width: 784px;
   height: 35px;
   font-weight: 500;
@@ -692,27 +752,30 @@ text-align: center;
   padding: 0 50px;
   margin-left: 20px; }
   .b2_list .b2_listUL .b2_listUL_top {
-    width: 400px;
-    height: 126px;
-    background: url(http://ad.wayboo.net.cn/common/img/i/b2_bg.jpg) no-repeat;
+   width: 400px;
+    height: 125px;
+    background: url(http://page-bucket.oiaqye7985.com/img/i/bb2_bg.jpg) no-repeat;
+    background-position: 50% 0;
     text-align: left;
     margin-bottom: 40px;
-    margin-top: 30px; }
+    padding-top: 10px;
+    text-align: center;
+    
+    }
     .b2_list .b2_listUL .b2_listUL_top h1 {
-      font-size: 28px;
-      color: #303030;
-      padding: 30px 0 0 5px; }
+     font-size: 28px;
+    color: #303030; }
     .b2_list .b2_listUL .b2_listUL_top p {
       font-size: 14px;
       color: #ff0006;
-      padding: 0px 0 0 60px; }
+     }
   .b2_list .b2_listUL ul {
   	text-align: left;
     font-size: 16px;
     color: #555555; }
     .b2_list .b2_listUL ul li {
       margin-bottom: 20px;
-      list-style-image: url(http://ad.wayboo.net.cn/common/img/i/xing.jpg);
+      list-style-image: url(http://page-bucket.oiaqye7985.com/img/i/xing.jpg);
        }
 .b2_list .b2_listB {
   margin-bottom: 30px; }
@@ -766,7 +829,7 @@ text-align: center;
 
   .title_Top {
     text-align: center;
-    background: url(http://ad.wayboo.net.cn/common/img/i/title_top.jpg) no-repeat;
+    background: url(http://page-bucket.oiaqye7985.com/img/i/title_top.jpg) no-repeat;
     background-position: 50% 50%;
     width: 100%;
     height: 35px;

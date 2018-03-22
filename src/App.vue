@@ -7,7 +7,7 @@
 					<div class="top-left-part" style="width: 200px;">
 						<a href="#" class="logo" style="display: block;">
 							<!--<span class="hidden-xs">-->
-		                       <img src="./assets/logo.png" alt="home" width="70%"/>
+		                       <img src="./assets/logo.png" alt="home" width="133px" height="36px"/>
                      		<!--</span>-->
 						</a>
 					</div>
@@ -48,7 +48,7 @@
 						<div class="dropdown user-pro-body">
 							<ul class="nav in" id="side-menu">
 								<li>
-									<router-link to="home" class="waves-effect">
+									<router-link to="/" class="waves-effect">
 										<span class="hide-menu text-left" style="display: flex;align-items: center;">
 											<i class="iconfont icon-shouye" style="margin-right: 20px;"></i>
 											首页 
@@ -72,7 +72,7 @@
 			<!--内容区结束-->
 			<footer class="footer text-center">
 				<font style="vertical-align: inherit;">
-					<font style="vertical-align: inherit;">信融模板制作 </font>
+					<font style="vertical-align: inherit;">信融着陆页智能制作系统 </font>
 				</font>
 			</footer>
 			<el-dialog
@@ -80,7 +80,7 @@
 			  :visible.sync="dialogVisible"
 			  width="30%"
 			  >
-			  <span>检查到您的浏览器是IE，继续使用可能会影响您的用户体验</span>
+			  <span>检查到您的浏览器是IE内核，继续使用可能会影响您的用户体验</span>
 			  <p>如果您使用的是360、QQ、百度等国内浏览器，请切换为急速模式</p>
 			  <p><img src="@/assets/360.png" width="100%"/></p>
 			  <span slot="footer" class="dialog-footer">
@@ -102,18 +102,17 @@ export default {
     }
   },
   mounted(){
-		this.$xhr.get("/login/channelInfo").then((res)=>{
-			this.UserName=res.data.sub_company
-			
-		}).catch(function (err) {
-		  alert("网络异常")
-		});
+  		this.$xhr.get("/login/channelInfo").then((res)=>{
+			this.UserName=res.data.sub_company;
+			this.apiUrl.allName=''
+		})
 		if(this.IEVersion()!=-1){
 			this.dialogVisible=true
 		}
   },
   methods:{
   	SignOut(){
+  		localStorage.clear()
   		$.cookie("token",null,{expires: -1,path: '/'})
         console.log($.cookie("token"))
     	window.location.href='http://sso.mywayboo.com/sso/sso/tologin.action?main=http://zz.wayboo.net.cn/static/index.html';

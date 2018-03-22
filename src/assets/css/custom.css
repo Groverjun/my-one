@@ -6770,7 +6770,7 @@ ul.wallet-list li a:hover {
 }
 
 .earning-box li {
-	display: box;
+	/*display: box;*/
 	list-style: none;
 	padding: 20px 0
 }
