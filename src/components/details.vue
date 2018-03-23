@@ -87,7 +87,8 @@ export default {
 		      		href:res.data[i].visitUrl,
 		      		state:res.data[i].state,
 		      		pageId:res.data[i].id,
-		      		checkInfo:res.data[i].checkInfo
+		      		checkInfo:res.data[i].checkInfo,
+		      		moduleType:res.data[i].modelType
 				})
 			}
 		},
@@ -115,7 +116,9 @@ export default {
   	newedit(index){
   		var _this=this;
   		localStorage.setItem("pageId",this.details[index].pageId);
-  		var id=this.details[index].pageId
+  		var id=this.details[index].pageId;
+  		var moduleType=this.details[index].moduleType
+//		console.log(moduleType)
   		$.ajax({
   			contentType :"application/json;charset=UTF-8",
 			type:"get",
@@ -124,19 +127,32 @@ export default {
   			async:true,
   			data:{"pageId":id},
 			success:function(res){
+//				console.log(res)
 				if(res.status==500){
 					return
 				}
 				var moduleDdata=res.data
 				var index= res.data.id
-				_this.$router.push({
-		             path: 'operation'+index, 
-		        	 name: 'operation'+index,
-		        	 params:{
-		            	moduleDdata:moduleDdata,
-		            	pageId:id
-		            }
-		        })
+//				console.log(res)
+				if(moduleType==0){
+					_this.$router.push({
+			             path: 'operation'+index, 
+			        	 name: 'operation'+index,
+			        	 params:{
+			            	moduleDdata:moduleDdata,
+			            	pageId:id
+			            }
+			        })
+				}else if(moduleType==1){
+					_this.$router.push({
+			             path: 'operation'+index+'Middle', 
+			        	 name: 'operation'+index+'Middle',
+			        	 params:{
+			            	moduleDdata:moduleDdata,
+			            	pageId:id
+			            }
+			        })
+				}
 			},
 			error(){
 				alert("网路故障")

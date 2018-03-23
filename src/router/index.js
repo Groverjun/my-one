@@ -11,7 +11,7 @@ import preview3 from '@/components/allPreview/preview3'
 import operation1 from '@/components/Template/model1/operation'
 import operation2 from '@/components/Template/model2/operation'
 import operation3 from '@/components/Template/model3/operation'
-import operation2Middle from '@/components/Template/model1/operationMiddle'
+import operation1Middle from '@/components/Template/model1/operationMiddle'
 Vue.use(Router)
 
 export default new Router({
@@ -57,9 +57,9 @@ export default new Router({
       component: operation3
     },
     {
-      path: '/operation2Middle',
-      name: 'operation2Middle',
-      component: operation2Middle
+      path: '/operation1Middle',
+      name: 'operation1Middle',
+      component: operation1Middle
     },
     {
       path: '/details',

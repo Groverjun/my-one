@@ -19,7 +19,7 @@
 					<div class="row">
 						<div class="col-md-24 text-center">
 							<a href="javascript:void(0)" class="pc_abt pc_activ">PC端制作</a>
-							<a href="#/operation2Middle" class="pc_abt">移动端制作</a>
+							<a href="#/operation1Middle" class="pc_abt">移动端制作</a>
 						</div>
 					</div>
 				</div>
@@ -36,10 +36,10 @@
 				<div class="Mask"  v-if="allDelete">
 					<p>上传图片的宽为1920PX</p>
 					<p>
-						<el-button type="primary "round class="fileBox">
+						<span type="primary "round class="fileBox">
 						上传<i class="el-icon-upload el-icon--right"></i>
 						<input type="file" v-on:change="head($refs.module2Head[index],index,1920)" ref="module2Head" />
-					</el-button>
+					</span>
 					 <el-button type="danger" round icon="el-icon-delete" @click="delHead(index)">删除</el-button>
 					</p>
 				</div>
@@ -58,10 +58,10 @@
 						<div class="Mask"  v-if="allDelete">
 							<p>上传图片的宽为1200PX</p>
 							<p>
-								<el-button type="primary "round class="fileBox">
+								<span type="primary "round class="fileBox">
 								上传<i class="el-icon-upload el-icon--right"></i>
 								<input type="file" v-on:change="maskFile($refs.module2mask[index],index,1200)" ref="module2mask" />
-								</el-button>
+								</span>
 								<el-button type="danger" round icon="el-icon-delete" @click="delMask(index)">删除</el-button>
 							</p>
 						</div>
@@ -81,10 +81,10 @@
 				<div class="Mask" v-if="allDelete">
 					<p>上传图片的宽为1920PX</p>
 					<p>
-						<el-button type="primary "round class="fileBox">
+						<span type="primary "round class="fileBox">
 						上传<i class="el-icon-upload el-icon--right"></i>
 						<input type="file" v-on:change="foot($refs.module2Foot[index],index,1920)" ref="module2Foot" />
-						</el-button>
+						</span>
 						<el-button type="danger" round icon="el-icon-delete" @click="delFoot(index)">删除</el-button>
 					</p>
 				</div>
@@ -192,7 +192,7 @@
     			"modelId":moduleId,
     		},
     		success:function(str){
-    			console.log(str.data.paramPC.head)
+//  			console.log(str.data.paramPC)
     			_this.data=str.data.paramPC
     		},
     		error:function(err){
@@ -353,8 +353,8 @@
                      var h1=''
                      _this.loading=true
 		             formData.append("file",file);
-                     if(parseInt(file.size/1024/1024)>1){
-                    	alert("图片不能大于1M")
+                     if(parseInt(file.size/1024)>300){
+                    	alert("图片不能大于300kb")
                     	_this.loading=false
                     	return false;  
                     }
@@ -366,7 +366,7 @@
                     reader.onload = function () {
                     	var image = new Image();
                     	image.onload=function(){
-                    		if(maxWidth<=(image.width+10)&&maxWidth>=(image.width-10)){
+                    		if(maxWidth<=(image.width+10)&&maxWidth>=(image.width-10)&&parseInt(file.size/1024)<300){
                     			/**发送Ajax请求*/
                     			$.ajax({
 			                		type:"post",
@@ -390,7 +390,7 @@
                     			
                     		}else{
                     			/**宽不正确*/
-                    			 txt="上传图片的宽为"+maxWidth+"PX"; h1="失败"
+                    			 txt="上传图片的宽为"+maxWidth+"PX;大小不能超过300kb"; h1="失败"
                     			_this.open(txt,h1)
                     			_this.loading=false
                     		}
@@ -410,9 +410,9 @@
 </script>
 
 <style scoped="scoped">
-	#background>div{
-		background: none;
-	}
+#background>div{
+	background: none;
+}
 .operation_head{
 	position: relative;
 }

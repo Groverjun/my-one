@@ -28,17 +28,17 @@
 		<div class="pageWrapperP_box">
 			<div id="operation_box" v-model="html">
 				<ul style="width: 768px; margin: auto;">
-					<li class="Mask_box" v-for="(maskBox,index) in data" v-loading="loading"  element-loading-text="拼命加载中"
+					<li class="Mask_box" v-for="(maskBox,index) in data.img" v-loading="loading"  element-loading-text="拼命加载中"
 			    element-loading-spinner="el-icon-loading"
 			    element-loading-background="rgba(0, 0, 0, 0.8)">
 						<img v-bind:src="maskBox" width="100%"/>
 						<div class="Mask"  v-if="allDelete">
 							<p>上传图片的宽为750PX</p>
 							<p>
-								<el-button type="primary "round class="fileBox">
+								<span type="primary "round class="fileBox">
 								上传<i class="el-icon-upload el-icon--right"></i>
 								<input type="file" v-on:change="maskFile($refs.module2mask[index],index,750)" ref="module2mask" />
-								</el-button>
+								</span>
 								<el-button type="danger" round icon="el-icon-delete" @click="delMask(index)">删除</el-button>
 							</p>
 						</div>
@@ -136,9 +136,11 @@
 		var moduleId=1
 		var modulePageId=null
 		if(this.$route.params.pageId==undefined){
+//			console.log("新增")
 		}else{
 			moduleId=this.$route.params.moduleDdata.id;
 			modulePageId=this.$route.params.pageId;
+//			console.log(modulePageId)
 		}
 		$.ajax({
     		contentType :"application/json;charset=UTF-8",
@@ -151,8 +153,8 @@
     			"modelId":moduleId,
     		},
     		success:function(str){
-//  			console.log(str.data.paramMob.img)
-    			_this.data=str.data.paramMob.img
+//  			console.log(str.data.paramMob)
+    			_this.data=str.data.paramMob
     		},
     		error:function(err){
     			console.log("err")
@@ -253,15 +255,15 @@
     		this.loading=true;
     		this.dataImg(_this,input_file,maxWidth,
 	    		function(str){
-	    		_this.data.splice(index,1,str)
+	    		_this.data.img.splice(index,1,str)
 	    	})
     	},
     	addMask(){
-    		this.data.push("http://ad.wayboo.net.cn/common/img/i/middle1.jpg")
+    		this.data.img.push("http://ad.wayboo.net.cn/common/img/i/middle1.jpg")
     	},
     	delMask(index){
 //  		console.log(index)
-    		this.data.splice(index,1)
+    		this.data.img.splice(index,1)
     	},
     	/*上传图片**/
 		dataImg(_this,input_file,maxWidth, get_data){
@@ -275,8 +277,8 @@
                      var h1=''
                      _this.loading=true
 		             formData.append("file",file);
-                     if(parseInt(file.size/1024/1024)>1){
-                    	alert("图片不能大于1M")
+                     if(parseInt(file.size/1024)>300){
+                    	alert("图片不能大于300kb")
                     	_this.loading=false
                     	return false;  
                     }
@@ -288,7 +290,7 @@
                     reader.onload = function () {
                     	var image = new Image();
                     	image.onload=function(){
-                    		if(maxWidth<=image.width&&maxWidth>=(image.width-10)){
+                    		if(maxWidth<=image.width&&maxWidth>=(image.width-10)&&parseInt(file.size/1024)<300){
                     			/**发送Ajax请求*/
                     			$.ajax({
 			                		type:"post",
@@ -310,7 +312,7 @@
                     			
                     		}else{
                     			/**宽不正确*/
-                    			 txt="上传图片的宽为"+maxWidth+"PX"; h1="失败"
+                    			 txt="上传图片的宽为"+maxWidth+"PX;大小不能超过300kb"; h1="失败"
                     			_this.open(txt,h1)
                     			_this.loading=false
                     		}

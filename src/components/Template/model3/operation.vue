@@ -25,10 +25,10 @@
 						<div class="Mask"  v-if="allDelete">
 							<p>上传图片的宽为500PX</p>
 							<p>
-								<el-button type="primary "round class="fileBox">
+								<span type="primary "round class="fileBox">
 								上传<i class="el-icon-upload el-icon--right"></i>
 								<input type="file" v-on:change="head($refs.module3Head,500)" ref="module3Head" />
-							</el-button>
+							</span>
 							</p>
 						</div>
 					</div>
@@ -90,10 +90,10 @@
 							<div class="Mask"  v-if="allDelete">
 								<p>上传图片的宽为1080PX</p>
 								<p>
-									<el-button type="primary "round class="fileBox">
+									<span type="primary "round class="fileBox">
 									上传<i class="el-icon-upload el-icon--right"></i>
 									<input type="file" v-on:change="parameter($refs.module3parameter[index],index,1080)" ref="module3parameter" />
-								</el-button>
+								</span>
 								 <el-button type="danger" round icon="el-icon-delete" @click="delparameter(index)">删除</el-button>
 								</p>
 							</div>
@@ -109,10 +109,10 @@
 					<div class="Mask"  v-if="allDelete">
 						<p>上传图片的宽为1920PX</p>
 						<p>
-							<el-button type="primary "round class="fileBox">
+							<span type="primary "round class="fileBox">
 							上传<i class="el-icon-upload el-icon--right"></i>
 							<input type="file" v-on:change="abt1($refs.module3abt1[index],index,1920)" ref="module3abt1" />
-						</el-button>
+						</span>
 						 <el-button type="danger" round icon="el-icon-delete" @click="delabt1(index)">删除</el-button>
 						</p>
 					</div>
@@ -134,10 +134,10 @@
 							<div class="Mask"  v-if="allDelete">
 								<p>上传图片的宽为1080PX</p>
 								<p>
-									<el-button type="primary "round class="fileBox">
+									<span type="primary "round class="fileBox">
 									上传<i class="el-icon-upload el-icon--right"></i>
 									<input type="file" v-on:change="beat($refs.module3beat[index],index,1080)" ref="module3beat" />
-								</el-button>
+								</span>
 								 <el-button type="danger" round icon="el-icon-delete" @click="delbeat(index)">删除</el-button>
 								</p>
 							</div>
@@ -153,10 +153,10 @@
 					<div class="Mask"  v-if="allDelete">
 						<p>上传图片的宽为1920PX</p>
 						<p>
-							<el-button type="primary "round class="fileBox">
+							<span type="primary "round class="fileBox">
 							上传<i class="el-icon-upload el-icon--right"></i>
 							<input type="file" v-on:change="abt2($refs.module3abt2[index],index,1920)" ref="module3abt2" />
-						</el-button>
+						</span>
 						 <el-button type="danger" round icon="el-icon-delete" @click="delabt2(index)">删除</el-button>
 						</p>
 					</div>
@@ -386,7 +386,6 @@
 	    	})
 		},
 		abt1(input_file,index,maxWidth){
-			console.log("699")
 			var _this=this;
     		this.dataImg(_this,input_file,maxWidth,
 	    		function(str){
@@ -459,8 +458,8 @@
 					 var txt=''
                      var h1=''
 		             formData.append("file",file);
-                     if(parseInt(file.size/1024/1024)>1){
-                    	alert("图片不能大于1M")
+                     if(parseInt(file.size/1024)>300){
+                    	alert("图片不能大于300kb")
                     	_this.logingT=false
                     	return false;  
                     }
@@ -472,7 +471,7 @@
                     reader.onload = function () {
                     	var image = new Image();
                     	image.onload=function(){
-                    		if(maxWidth<=(image.width+10)&&maxWidth>=(image.width-10)){
+                    		if(maxWidth<=(image.width+10)&&maxWidth>=(image.width-10)&&parseInt(file.size/1024)<300){
                     			/**发送Ajax请求*/
                     			$.ajax({
 			                		type:"post",
@@ -494,7 +493,7 @@
 			                	});
                     		}else{
                     			/**宽不正确*/
-                    			 txt="上传图片的宽为"+maxWidth+"PX"; h1="失败"
+                    			 txt="上传图片的宽为"+maxWidth+"PX;大小不能超过300kb"; h1="失败"
                     			_this.open(txt,h1)
                     			_this.logingT=false
                     		}

@@ -25,10 +25,10 @@
 				<div class="mask" v-if="IFdata">
 					<p style="color: #fff;">上传图片的宽为1920PX</p>
 					<p>
-						<el-button type="primary "round class="fileBox">
+						<span type="primary "round class="fileBox">
 						上传<i class="el-icon-upload el-icon--right"></i>
 						<input type="file" @change="bannerFile($refs.bannerImg[index],index,1920)" ref="bannerImg"/>
-						</el-button>
+						</span>
 						<el-button type="danger" round icon="el-icon-delete" @click="bannerDel(index)">删除</el-button>
 					</p>
 				</div>
@@ -60,10 +60,10 @@
 									<div class="mask" v-if="IFdata">
 										<p style="color: #fff;">上传图片的宽为370PX</p>
 										<p>
-											<el-button type="primary "round class="fileBox">
+											<span type="primary "round class="fileBox">
 											上传<i class="el-icon-upload el-icon--right"></i>
 											<input type="file" @change="productFile($refs.productImg[index],index,370)" ref="productImg"/>
-											</el-button>
+											</span>
 											<el-button type="danger" round icon="el-icon-delete" @click="productDel(index)">删除</el-button>
 										</p>
 									</div>
@@ -91,10 +91,10 @@
 					<div class="mask" v-if="IFdata">
 						<p style="color: #fff;">上传图片的宽为1920PX</p>
 						<p>
-							<el-button type="primary "round class="fileBox">
+							<span type="primary "round class="fileBox">
 							上传<i class="el-icon-upload el-icon--right"></i>
 							<input type="file" @change="isoFile($refs.isoImg[index],index,1920)" ref="isoImg"/>
-							</el-button>
+							</span>
 							<el-button type="danger" round icon="el-icon-delete" @click="isoDel(index)">删除</el-button>
 						</p>
 					</div>
@@ -148,10 +148,10 @@
 										<div class="mask" v-if="IFdata">
 											<p style="color: #fff;">上传图片的宽为590PX</p>
 											<p>
-												<el-button type="primary "round class="fileBox">
+												<span type="primary "round class="fileBox">
 												上传<i class="el-icon-upload el-icon--right"></i>
 												<input type="file" @change="advantageFile($refs.advantageImg[index],index,590)" ref="advantageImg"/>
-												</el-button>
+												</span>
 												<el-button type="danger" round icon="el-icon-delete" @click="advantageDel(index)">删除</el-button>
 											</p>
 										</div>
@@ -176,10 +176,10 @@
 					<div class="mask" v-if="IFdata">
 						<p style="color: #fff;">上传图片的宽为1920PX</p>
 						<p>
-							<el-button type="primary "round class="fileBox">
+							<span type="primary "round class="fileBox">
 							上传<i class="el-icon-upload el-icon--right"></i>
 							<input type="file" @change="steelFile($refs.steelImg[index],index,1920)" ref="steelImg"/>
-							</el-button>
+							</span>
 							<el-button type="danger" round icon="el-icon-delete" @click="steeloDel(index)">删除</el-button>
 						</p>
 					</div>
@@ -210,10 +210,10 @@
 										<div class="mask" v-if="IFdata">
 											<p style="color: #fff;">上传图片的宽为375PX</p>
 											<p>
-												<el-button type="primary "round class="fileBox">
+												<span type="primary "round class="fileBox">
 												上传<i class="el-icon-upload el-icon--right"></i>
 												<input type="file" @change="fulCasesFile($refs.fulCasesImg[index],index,375)" ref="fulCasesImg"/>
-												</el-button>
+												</span>
 												<el-button type="danger" round icon="el-icon-delete" @click="fulCasesDel(index)">删除</el-button>
 											</p>
 										</div>
@@ -258,10 +258,10 @@
 									<span class="mask" v-if="IFdata">
 										<p style="color: #fff;">上传图片的宽为280PX</p>
 										<p>
-											<el-button type="primary "round class="fileBox">
+											<span type="primary "round class="fileBox">
 											上传<i class="el-icon-upload el-icon--right"></i>
 											<input type="file" @change="footFile($refs.footImg[index],index,280)" ref="footImg"/>
-											</el-button>
+											</span>
 											<el-button type="danger" round icon="el-icon-delete" @click="footDel(index)">删除</el-button>
 										</p>
 									</span>
@@ -391,7 +391,7 @@
     			console.log("err")
     		}
     	});
-		console.log(this.data)
+//		console.log(this.data)
     },
     methods: {
     	ImmediateUseclick(){
@@ -479,7 +479,7 @@
     		this.dataImg(_this,input_file,maxWidth,
 		    	function(str){
 		    		_this.data.banner.splice(index,1,str)
-		    		console.log(_this.data)
+//		    		console.log(_this.data)
 		    })
       },
       bannerDel(index){
@@ -531,7 +531,7 @@
 			var _this=this;
     		this.dataImg(_this,input_file,maxWidth,
 		    	function(str){
-		    		console.log(str)
+//		    		console.log(str)
 		    		_this.data.iso.splice(index,1,str)
 //		    		console.log(_this.data)
 		    })
@@ -623,8 +623,8 @@
 					 var txt=''
                      var h1=''
 		             formData.append("file",file);
-                     if(parseInt(file.size/1024/1024)>1){
-                    	alert("图片不能大于1M")
+                     if(parseInt(file.size/1024)>300){
+                    	alert("图片不能大于300kb")
                     	_this.logingT=false
                     	return false;  
                     }
@@ -636,7 +636,7 @@
                     reader.onload = function () {
                     	var image = new Image();
                     	image.onload=function(){
-                    		if(maxWidth<=(image.width+10)&&maxWidth>=(image.width-10)){
+                    		if(maxWidth<=(image.width+10)&&maxWidth>=(image.width-10)&&parseInt(file.size/1024)<300){
                     			/**发送Ajax请求*/
                     			$.ajax({
 			                		type:"post",
@@ -658,7 +658,7 @@
 			                	});
                     		}else{
                     			/**宽不正确*/
-                    			 txt="上传图片的宽为"+maxWidth+"PX"; h1="失败"
+                    			 txt="上传图片的宽为"+maxWidth+"PX;大小不能超过300kb"; h1="失败"
                     			_this.open(txt,h1)
                     			_this.logingT=false
                     		}
